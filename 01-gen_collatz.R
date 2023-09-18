@@ -8,24 +8,24 @@ gen_collatz <- function(n) {
   if (is.numeric(n) == FALSE) {
     stop("Invalid input: Not a numerical value")
   }
-  
+
   # Input should all be integers
   if ((n == as.integer(n)) == FALSE) {
     stop("Invalid input: Not an integer")
   }
-  
+
   # Input should be 1 or more
   if (n < 1) {
     stop("Invalid input: Value is less than 1")
   }
-  
+
   # Initialize values
   start <- n
   current <- n
   seq <- c(n)
   parity <- ifelse(n %% 2 == 0, "EVEN", "ODD")
   max_val <- n
-  
+
   # The actual function
   while (current > 1) {
     # check if odd or even
@@ -34,27 +34,27 @@ gen_collatz <- function(n) {
     } else {
       current <- (current * 3) + 1
     }
-    
+
     # save the new number into the sequence
     seq <- c(seq, current)
-    
+
     # check if it is bigger than the current max_val
     if (current > max_val) {
       max_val <- current
     }
   }
-  
+
   # check length of the sequence by the end
   length <- length(seq)
-  
+
   # return what is needed
   # (don't forget to change seq into a list!)
-  return(list("start" = start, 
-              "seq" = list(seq), 
-              "length" = length, 
-              "parity" = parity, 
+  return(list("start" = start,
+              "seq" = list(seq),
+              "length" = length,
+              "parity" = parity,
               "max_val" = max_val)
-         )
+  )
 }
 
 # Time to create a tibble!
@@ -69,7 +69,7 @@ collatz_df <- tibble(
 n <- 2
 
 while (n <= 10000) {
-  collatz_df <- 
+  collatz_df <-
     collatz_df %>%
     add_row(
       "start" = n,
@@ -78,6 +78,6 @@ while (n <= 10000) {
       "parity" = gen_collatz(n)$parity,
       "max_val" = gen_collatz(n)$max_val
     )
-  
+
   n <- n + 1
 }
