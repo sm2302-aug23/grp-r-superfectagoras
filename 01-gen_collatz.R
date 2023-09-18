@@ -20,11 +20,8 @@ gen_collatz <- function(n) {
   }
 
   # Initialize values
-  start <- n
   current <- n
   seq <- c(n)
-  parity <- ifelse(n %% 2 == 0, "EVEN", "ODD")
-  max_val <- n
 
   # The actual function
   while (current > 1) {
@@ -37,33 +34,18 @@ gen_collatz <- function(n) {
 
     # save the new number into the sequence
     seq <- c(seq, current)
-
-    # check if it is bigger than the current max_val
-    if (current > max_val) {
-      max_val <- current
-    }
   }
 
-  # check length of the sequence by the end
-  length <- length(seq)
-
-  # return what is needed
-  # (don't forget to change seq into a list!)
-  return(list("start" = start,
-              "seq" = list(seq),
-              "length" = length,
-              "parity" = parity,
-              "max_val" = max_val)
-  )
+  # return the sequence
+  return(seq)
 }
 
-# Time to create a tibble!
 collatz_df <- tibble(
   "start" = 1,
-  "seq" = gen_collatz(1)$seq,
-  "length" = gen_collatz(1)$length,
-  "parity" = gen_collatz(1)$parity,
-  "max_val" = gen_collatz(1)$max_val
+  "seq" = list(gen_collatz(1)),
+  "length" = length(unlist(seq)),
+  "parity" = ifelse((start %% 2) == 0, "EVEN", "ODD"),
+  "max_val" = max(unlist(seq))
 )
 
 n <- 2
@@ -73,10 +55,10 @@ while (n <= 10000) {
     collatz_df %>%
     add_row(
       "start" = n,
-      "seq" = gen_collatz(n)$seq,
-      "length" = gen_collatz(n)$length,
-      "parity" = gen_collatz(n)$parity,
-      "max_val" = gen_collatz(n)$max_val
+      "seq" = list(gen_collatz(n)),
+      "length" = length(unlist(seq)),
+      "parity" = ifelse((start %% 2) == 0, "EVEN", "ODD"),
+      "max_val" = max(unlist(seq))
     )
 
   n <- n + 1
