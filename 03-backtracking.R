@@ -14,16 +14,14 @@ backtrack <- function(x) {
 
   while (current <= length(x)) {
     # check for when current value is less than initial
-    if (x[current] < initial &&
-          (below_init == FALSE)) {
+    if (x[current] < initial) {
       below_init <- TRUE
     }
 
     # check for when current value is higher than initial
     # but only after below_init is TRUE
     if ((x[current] > initial) &&
-          (below_init == TRUE) &&
-          (above_init == FALSE)) {
+          (below_init == TRUE)) {
       above_init <- TRUE
     }
 
@@ -137,33 +135,31 @@ max_backtrack <- function(x) {
   below_init <- FALSE
   above_init <- FALSE
   max_val <- 0
-  
+
   while (current <= length(x)) {
     # check for when current value is less than initial
-    if (x[current] < initial &&
-       (below_init == FALSE)) {
+    if (x[current] < initial) {
       below_init <- TRUE
     }
-    
+
     # check for when current value is higher than initial
     # but only after below_init is TRUE
     if ((x[current] > initial) &&
-        (below_init == TRUE) &&
-        (above_init == FALSE)) {
+          (below_init == TRUE)) {
       above_init <- TRUE
     }
-    
+
     # if below_init and above_init is true, start checking for max val
     if (below_init && above_init) {
       if (x[current] > max_val) {
         max_val <- x[current]
       }
     }
-    
+
     # increment current by 1
     current <- current + 1
   }
-  
+
   # return the max_val
   return(max_val)
 }
@@ -179,7 +175,7 @@ max_after_backtrack <-
 # ----------------------- even_odd_backtrack ----------------------------------
 
 ## only need to filter by parity
-even_odd_backtrack <- 
+even_odd_backtrack <-
   backtracks_df %>%
   count(parity) %>%
   pull(n)
