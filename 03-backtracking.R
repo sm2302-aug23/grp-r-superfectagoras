@@ -2,7 +2,8 @@
 
 library(tidyverse)
 
-# backtracks_df
+# ---------------------------- backtracks_df ----------------------------------
+
 ## function backtrack to check for backtracking
 backtrack <- function(x) {
   # initialize
@@ -38,12 +39,12 @@ backtrack <- function(x) {
 backtracks_df <-
   collatz_df %>%
   filter(
-    length >= 3,
     sapply(seq, backtrack)
   )
 
-# mode_backtrack
-# backtrack count
+# -------------------------- mode_backtrack -----------------------------------
+
+## backtrack count
 backtrack_count <- function(x) {
   # initialize
   initial <- x[1]
@@ -83,7 +84,7 @@ backtrack_count <- function(x) {
   return(counter)
 }
 
-# mode calculator
+## mode calculator
 mode_calculator <- function(x) {
   # initialize
   unique_nums <- c()
@@ -114,7 +115,7 @@ mode_calculator <- function(x) {
   return(mode_freq)
 }
 
-# doing the actual filtering with backtrack_count
+## doing the actual filtering with backtrack_count
 mode_backtrack <-
   backtracks_df %>%
   mutate(
@@ -125,3 +126,52 @@ mode_backtrack <-
   )
 
 mode_backtrack <- mode_backtrack$mode
+
+# -------------------------- max_after_backtrack ------------------------------
+
+## function to find the max after first backtrack
+max_backtrack <- function(x) {
+  # initialize
+  initial <- x[1]
+  current <- 2
+  below_init <- FALSE
+  above_init <- FALSE
+  max_val <- 0
+  
+  while (current <= length(x)) {
+    # check for when current value is less than initial
+    if (x[current] < initial &&
+       (below_init == FALSE)) {
+      below_init <- TRUE
+    }
+    
+    # check for when current value is higher than initial
+    # but only after below_init is TRUE
+    if ((x[current] > initial) &&
+        (below_init == TRUE) &&
+        (above_init == FALSE)) {
+      above_init <- TRUE
+    }
+    
+    # if below_init and above_init is true, start checking for max val
+    if (below_init && above_init) {
+      if (x[current] > max_val) {
+        max_val <- x[current]
+      }
+    }
+    
+    # increment current by 1
+    current <- current + 1
+  }
+  
+  # return the max_val
+  return(max_val)
+}
+
+## doing the actual filtering with max_after_backtrack
+max_after_backtrack <-
+  backtracks_df %>%
+  mutate(
+    "max_backtrack" = sapply(seq, max_backtrack)
+  ) %>%
+  pull(max_backtrack)
