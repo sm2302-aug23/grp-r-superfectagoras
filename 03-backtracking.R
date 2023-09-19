@@ -175,3 +175,11 @@ max_after_backtrack <-
     "max_backtrack" = sapply(seq, max_backtrack)
   ) %>%
   pull(max_backtrack)
+
+# ----------------------- even_odd_backtrack ----------------------------------
+
+## only need to filter by parity
+even_odd_backtrack <- 
+  backtracks_df %>%
+  count(parity) %>%
+  pull(n)
