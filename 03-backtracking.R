@@ -121,9 +121,8 @@ mode_backtrack <-
   ) %>%
   summarize(
     "mode" = mode_calculator(freq)
-  )
-
-mode_backtrack <- mode_backtrack$mode
+  ) %>%
+  pull(1)
 
 # -------------------------- max_after_backtrack ------------------------------
 
