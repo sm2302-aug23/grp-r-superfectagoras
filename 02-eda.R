@@ -15,3 +15,21 @@ max_val_int <- collatz_df %>%
   arrange(desc(max_val))%>%
   head(1)%>%
   pull("start")
+
+## 3. Find the difference between the average length and standard deviation of the sequence for even and odd starting integers.
+
+   # Getting all the length of all even starting integers.
+even_len <- collatz_df %>%
+  filter(parity == "EVEN")%>%
+  pull("length")
+
+  # Getting all the length of all odd starting integers.
+odd_len <- collatz_df %>%
+  filter(parity == "ODD")%>%
+  pull("length")
+
+  # Calculating the difference between average of even starting integers length with odd ones.
+even_odd_avg_len <- mean(even_len) - mean(odd_len)
+
+# Calculating the difference between standard deviation of even starting integers length with odd ones.
+even_odd_sd_len <-  sd(even_len) - sd(odd_len)
