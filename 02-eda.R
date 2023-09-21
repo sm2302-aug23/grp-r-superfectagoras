@@ -28,8 +28,8 @@ odd_len <- collatz_df %>%
   filter(parity == "ODD")%>%
   pull("length")
 
-  # Calculating the difference between average of even starting integers length with odd ones.
-even_odd_avg_len <- mean(even_len) - mean(odd_len)
+  # Comparing the average of even starting integers length with odd ones.
+even_odd_avg_len <- c(mean(even_len),mean(odd_len))
 
-# Calculating the difference between standard deviation of even starting integers length with odd ones.
-even_odd_sd_len <-  sd(even_len) - sd(odd_len)
+  # Comparing the standard deviation of even starting integers length with odd ones.
+even_odd_sd_len <-  c(sd(even_len),sd(odd_len))
