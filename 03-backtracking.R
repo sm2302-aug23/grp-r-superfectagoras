@@ -12,6 +12,7 @@ backtrack <- function(x) {
   below_init <- FALSE
   above_init <- FALSE
 
+
   while (current <= length(x)) {
     # check for when current value is less than initial
     if (x[current] < initial) {
@@ -21,7 +22,7 @@ backtrack <- function(x) {
     # check for when current value is higher than initial
     # but only after below_init is TRUE
     if ((x[current] > initial) &&
-          (below_init == TRUE)) {
+      (below_init == TRUE)) {
       above_init <- TRUE
     }
 
@@ -29,9 +30,19 @@ backtrack <- function(x) {
     current <- current + 1
   }
 
-  # Both must be TRUE to be considered backtracking
-  ifelse(below_init & above_init, TRUE, FALSE)
+  # check for when current value is higher than initial
+  # but only after below_init is TRUE
+  if ((x[current] > initial) &&
+    (below_init == TRUE)) {
+    above_init <- TRUE
+  }
+
+  # increment current by 1
+  current <- current + 1
 }
+
+# Both must be TRUE to be considered backtracking
+ifelse(below_init & above_init, TRUE, FALSE)
 
 ## doing the actual filtering with the function
 backtracks_df <-
@@ -54,25 +65,46 @@ backtrack_count <- function(x) {
   while (current <= length(x)) {
     # check for when current value is less than initial
     if (x[current] < initial &&
-          (below_init == FALSE)) {
+      (below_init == FALSE)) {
       below_init <- TRUE
     }
 
     # check for when current value is higher than initial
     # but only after below_init is TRUE
     if ((x[current] > initial) &&
-          (below_init == TRUE) &&
-          (above_init == FALSE)) {
+      (below_init == TRUE) &&
+      (above_init == FALSE)) {
       above_init <- TRUE
     }
 
-    # if below_init and above_init is true, add 1 to counter
-    # immediately change back the variables to their FALSE state
-    if (below_init && above_init) {
-      counter <- counter + 1
-      below_init <- FALSE
-      above_init <- FALSE
+
+    while (current <= length(x)) {
+      # check for when current value is less than initial
+      if (x[current] < initial &&
+        (below_init == FALSE)) {
+        below_init <- TRUE
+      }
+
+      # check for when current value is higher than initial
+      # but only after below_init is TRUE
+      if ((x[current] > initial) &&
+        (below_init == TRUE) &&
+        (above_init == FALSE)) {
+        above_init <- TRUE
+      }
+
+      # if below_init and above_init is true, add 1 to counter
+      # immediately change back the variables to their FALSE state
+      if (below_init && above_init) {
+        counter <- counter + 1
+        below_init <- FALSE
+        above_init <- FALSE
+      }
+
+      # increment current by 1
+      current <- current + 1
     }
+
 
     # increment current by 1
     current <- current + 1
@@ -104,10 +136,12 @@ mode_calculator <- function(x) {
     }
   }
 
+
   # Find the index of the highest frequency
   # then find the number represented by that frequency
   index <- which(num_freq == max(num_freq))
   mode_freq <- unique_nums[index]
+
 
   # return the mode
   return(mode_freq)
@@ -135,6 +169,7 @@ max_backtrack <- function(x) {
   above_init <- FALSE
   max_val <- 0
 
+
   while (current <= length(x)) {
     # check for when current value is less than initial
     if (x[current] < initial) {
@@ -144,7 +179,15 @@ max_backtrack <- function(x) {
     # check for when current value is higher than initial
     # but only after below_init is TRUE
     if ((x[current] > initial) &&
-          (below_init == TRUE)) {
+      (below_init == TRUE)) {
+      above_init <- TRUE
+    }
+
+
+    # check for when current value is higher than initial
+    # but only after below_init is TRUE
+    if ((x[current] > initial) &&
+      (below_init == TRUE)) {
       above_init <- TRUE
     }
 
@@ -159,9 +202,13 @@ max_backtrack <- function(x) {
     current <- current + 1
   }
 
-  # return the max_val
-  return(max_val)
+
+  # increment current by 1
+  current <- current + 1
 }
+
+# return the max_val
+return(max_val)
 
 ## doing the actual filtering with max_after_backtrack
 max_after_backtrack <-
@@ -178,3 +225,4 @@ even_odd_backtrack <-
   backtracks_df %>%
   count(parity) %>%
   pull(n)
+pull(n)

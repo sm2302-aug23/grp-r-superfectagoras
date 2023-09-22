@@ -41,5 +41,38 @@ ggplot(
 
 # Q2 Scatterplot of Highest Sequence Value vs. Starting Integers ---------------
 
+# Identifying the top 10 starting integers (highest value reached)
+top10highvalue <- backtracks_df %>%
+  # Rearranging the data frame or starting integers in descending order
+  arrange(desc(max_val_int)) %>%
+  # Selecting top 10 starting integers
+  head(10)
+# Create scatter plot of highest value reach with labels
+ggplot(
+  data = backtracks_df,
+  aes(x = start, y = max_val_int)
+) +
+  geom_point() +
+  labs(
+    title = "Highest Sequence Value vs Starting Integers",
+    x = "Starting Integers",
+    y = "Highest Sequence Value Reached"
+  ) +
+  geom_point(
+    data = top10highvalue,
+    aes(x = start, y = max_val_int),
+    col = "purple4",
+    size = 3,
+    shape = 15
+  ) +
+  geom_text(
+    data = top10highvalue,
+    aes(x = start, y = max_val_int, label = start),
+    vjust = -0.5, # Adjust vertical position of labels
+    hjust = 0.5, # Adjust horizontal position of labels
+    size = 3, # Size of the labels
+    color = "orange2" # Text color for top 10 label
+  )
+
 
 # Q3 Boxplot Comparison of Sequence Lengths for Even and Odd Starting Integers -

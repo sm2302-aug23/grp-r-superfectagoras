@@ -9,7 +9,7 @@ top10longest <- collatz_df %>%
   head(10) %>%
   pull("start")
 
-## 2. Find out which starting integer produces a sequence
+## 2. Find out which starviewting integer produces a sequence
 ##    that reaches the highest max value.
 
 max_val_int <- collatz_df %>%
@@ -35,4 +35,4 @@ even_odd_avg_len <- c(mean(even_len), mean(odd_len))
 
 # Comparing the standard deviation of
 # even starting integers length with odd ones.
-even_odd_sd_len <- c(sd(even_len), sd(odd_len))
+even_odd_sd_len <-  c(sd(even_len), sd(odd_len))

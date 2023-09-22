@@ -23,6 +23,11 @@ gen_collatz <- function(n) {
   current <- n
   seq <- c(n)
 
+
+  # Initialize values
+  current <- n
+  seq <- c(n)
+
   # The actual function
   while (current > 1) {
     # check if odd or even
@@ -36,10 +41,13 @@ gen_collatz <- function(n) {
     seq <- c(seq, current)
   }
 
-  # return the sequence
-  return(seq)
+
+  # save the new number into the sequence
+  seq <- c(seq, current)
 }
 
+# return the sequence
+return(seq)
 collatz_df <- tibble(
   "start" = 1,
   "seq" = list(gen_collatz(1)),
@@ -63,3 +71,5 @@ while (n <= 10000) {
 
   n <- n + 1
 }
+
+n <- n + 1
