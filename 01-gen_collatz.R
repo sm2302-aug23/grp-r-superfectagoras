@@ -41,13 +41,11 @@ gen_collatz <- function(n) {
     seq <- c(seq, current)
   }
 
-
-  # save the new number into the sequence
-  seq <- c(seq, current)
+  # return the sequence
+  return(seq)
 }
 
-# return the sequence
-return(seq)
+# Time to create a tibble!
 collatz_df <- tibble(
   "start" = 1,
   "seq" = list(gen_collatz(1)),
@@ -71,5 +69,3 @@ while (n <= 10000) {
 
   n <- n + 1
 }
-
-n <- n + 1
