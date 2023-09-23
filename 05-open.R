@@ -15,12 +15,6 @@ collatz_sequence <- collatz_df
 start_range <- 1
 end_range <- 10000
 
-## Generate collatz sequences for each starting integer in the range and create a data frame
-collatz_df <- data.frame(
-  starting_integer = rep(start_range:end_range, each = end_range - start_range + 1),
-  seq = unlist(lappy(start_range:end_range, collatz_sequence))
-)
-
 ## Wrangle the data to identify odd and even numbers in each sequence
 collatz_df <- collatz_df %>%
   mutate(is_odd = seq %% 2 == 1,
