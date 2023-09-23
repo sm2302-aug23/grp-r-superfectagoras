@@ -5,7 +5,7 @@ library(ggplot2)
 install.packages("ggrepel")
 library(ggrepel)
 
-# Q1 Scatterplot of Sequence Lengths vs. Starting Integers ---------------------
+# Q1 Scatterplot of Sequence Lengths vs. Starting Integers --------------------
 
 # Filtering the top 10 results from collatz_df
 top10data <- collatz_df %>%
@@ -39,7 +39,7 @@ ggplot(
     size = 3
   )
 
-# Q2 Scatter plot of Highest Sequence Value vs. Starting Integers ---------------
+# Q2 Scatter plot of Highest Sequence Value vs. Starting Integers -------------
 
 # Identifying the top 10 starting integers (highest value reached)
 top10highvalue <- collatz_df %>%
@@ -50,7 +50,7 @@ top10highvalue <- collatz_df %>%
 
 # Create the scatterplot for highest value vs. starting integers
 ggplot(data = collatz_df, aes(x = start, y = max_val)) +
-  geom_point() +  # Scatterplot for all integers
+  geom_point() + # Scatterplot for all integers
   labs(
     title = "Highest Sequence Value vs. Starting Integers",
     x = "Starting Integers",
@@ -59,20 +59,20 @@ ggplot(data = collatz_df, aes(x = start, y = max_val)) +
   geom_point(
     data = top10highvalue,
     aes(x = start, y = max_val),
-    col = "purple4",  # Color for the top 10 starting integers
-    size = 2,     # Size of the points for the top 10
-    shape = 15    # Shape of the points for the top 10 (square)
+    col = "purple4", # Color for the top 10 starting integers
+    size = 2, # Size of the points for the top 10
+    shape = 15 # Shape of the points for the top 10 (square)
   ) +
   geom_text_repel(
     data = top10highvalue,
     aes(x = start, y = max_val, label = start),
-    vjust = -0.5,  # Adjust vertical position of labels
-    hjust = 0.5,   # Adjust horizontal position of labels
-    size = 3,       # Size of the labels
+    vjust = -0.5, # Adjust vertical position of labels
+    hjust = 0.5, # Adjust horizontal position of labels
+    size = 3, # Size of the labels
     col = "orange2" # Color for labeling top 10 value points
-  )+
+  ) +
   scale_y_log10() # Add logarithmic scale to the y-axis
 
 
 
-# Q3 Box plot Comparison of Sequence Lengths for Even and Odd Starting Integers -
+# Q3 Comparing Sequence Lengths: Even vs. Odd Starting Numbers ----------------
