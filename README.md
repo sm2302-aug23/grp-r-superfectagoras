@@ -290,6 +290,7 @@ even_odd_backtrack <-
 ## Task 5: Open-ended Exploration
 ### Question
 > What is the distribution of even and odd numbers in Collatz sequences?
+
 We will explore the Collatz Conjecture to understand the distributions of odd and even numbers within these sequences.
 Specifically, we want to estimate if there are patterns or trends related to the occurrence of odd and even numbers across different starting integers and visualize these distributions using R.
 Additionally, we also want to explore whether there is a relationship between even and odd numbers in terms of their ratio.
