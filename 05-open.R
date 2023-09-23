@@ -16,10 +16,9 @@ start_range <- 1
 end_range <- 10000
 
 ## Wrangle the data to identify odd and even numbers in each sequence
-collatz_df <- collatz_df %>%
+collatz_sequence <- collatz_sequence %>%
   mutate(is_odd = seq %% 2 == 1,
          is_even = seq %% 2 == 0)
-
 
 ## Explore and visualize the distribution of odd and even numbers
 ## For example, create a histogram:
