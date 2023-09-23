@@ -39,17 +39,17 @@ ggplot(
     size = 3
   )
 
-# Q2 Scatterplot of Highest Sequence Value vs. Starting Integers ---------------
+# Q2 Scatter plot of Highest Sequence Value vs. Starting Integers ---------------
 
 # Identifying the top 10 starting integers (highest value reached)
-top10highvalue <- backtracks_df %>%
+top10highvalue <- collatz_df %>%
   # rearranging the data frame or starting integers in descending manners
   arrange(desc(max_val)) %>%
   # selecting top 10 starting integers from above code
   top_n(10)
 
 # Create the scatterplot for highest value vs. starting integers
-ggplot(data = backtracks_df, aes(x = start, y = max_val)) +
+ggplot(data = collatz_df, aes(x = start, y = max_val)) +
   geom_point() +  # Scatterplot for all integers
   labs(
     title = "Highest Sequence Value vs. Starting Integers",
@@ -69,7 +69,10 @@ ggplot(data = backtracks_df, aes(x = start, y = max_val)) +
     vjust = -0.5,  # Adjust vertical position of labels
     hjust = 0.5,   # Adjust horizontal position of labels
     size = 3,       # Size of the labels
-    col = "orange2"
-  )
+    col = "orange2" # Color for labeling top 10 value points
+  )+
+  scale_y_log10() # Add logarithmic scale to the y-axis
 
-# Q3 Boxplot Comparison of Sequence Lengths for Even and Odd Starting Integers -
+
+
+# Q3 Box plot Comparison of Sequence Lengths for Even and Odd Starting Integers -
