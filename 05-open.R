@@ -1,40 +1,36 @@
 # Task 5
 
-# Question: Are there common stopping times that appear frequently across different starting integeres?
+# Question: Investigate if there are patterns or trends related to the occurrence of odd and even numbers across different starting integers
 
-#Below is the Rcode examples to investigate and to explore collatz conjecture sequences in common stopping times
+#Below is the Rcode examples to explore collatz conjecture sequences in distribution of odd and even numbers
 
-## Function to calculate stopping time for a given starting integer
-collatz_stopping_time <- function(starting_integer) {
-  n <- starting_integer
-  steps <- 0
-  
+## Function to generate Collatz sequence for a given starting integer
+collatz_sequence <- function(n) {
+  sequence <- c(n)
   while (n != 1) {
     if (n %% 2 == 0) {
       n <- n / 2
     } else {
       n <- 3 * n + 1
     }
-    steps <- steps + 1
+    sequence <- c(sequence, n)
   }
-  
-  return(steps)
+  return(sequence)
 }
 
-## Generate Collatz stopping times for a range of starting integers
-starting_integers <- 1:1000
-stopping_times <- sapply(starting_integers, collatz_stopping_time)
+## Define the range of starting integers
+start_range <- 1
+end_range <- 10000
 
-## Create a histogram of stopping times
-hist(stopping_times, breaks = 30, main = "Distribution of Collatz Stopping Times", xlab = "Stopping Time")
+## Generate Collatz sequences for each starting integer in the range
+sequences <- lapply(start_range:end_range, collatz_sequence)
 
-## Calculate summary statistics
+## Analyze the distribution of odd and even numbers in the sequences
+odd_even_counts <- sapply(sequences, function(seq) {
+  odd_count <- sum(seq %% 2 == 1)
+  even_count <- sum(seq %% 2 == 0)
+  return(list(odd_count = odd_count, even_count = even_count))
+})
 
-
-
-
-
-
-
-
+## Visualize the distribution of odd and even numbers, or perform further analysis
 
