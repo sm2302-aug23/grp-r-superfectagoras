@@ -43,36 +43,33 @@ ggplot(
 
 # Identifying the top 10 starting integers (highest value reached)
 top10highvalue <- backtracks_df %>%
-  # Rearranging the data frame or starting integers in descending order
-  arrange(desc(max_val_int)) %>%
-  # Selecting top 10 starting integers
-  head(10)
-# Create scatter plot of highest value reach with labels
-ggplot(
-  data = backtracks_df,
-  aes(x = start, y = max_val_int)
-) +
-  geom_point() +
+  # rearranging the data frame or starting integers in descending manners
+  arrange(desc(max_val)) %>%
+  # selecting top 10 starting integers from above code
+  top_n(10)
+
+# Create the scatterplot for highest value vs. starting integers
+ggplot(data = backtracks_df, aes(x = start, y = max_val)) +
+  geom_point() +  # Scatterplot for all integers
   labs(
-    title = "Highest Sequence Value vs Starting Integers",
+    title = "Highest Sequence Value vs. Starting Integers",
     x = "Starting Integers",
-    y = "Highest Sequence Value Reached"
+    y = "Highest Sequence Value"
   ) +
   geom_point(
     data = top10highvalue,
-    aes(x = start, y = max_val_int),
-    col = "purple4",
-    size = 3,
-    shape = 15
+    aes(x = start, y = max_val),
+    col = "purple4",  # Color for the top 10 starting integers
+    size = 2,     # Size of the points for the top 10
+    shape = 15    # Shape of the points for the top 10 (square)
   ) +
-  geom_text(
+  geom_text_repel(
     data = top10highvalue,
-    aes(x = start, y = max_val_int, label = start),
-    vjust = -0.5, # Adjust vertical position of labels
-    hjust = 0.5, # Adjust horizontal position of labels
-    size = 3, # Size of the labels
-    color = "orange2" # Text color for top 10 label
+    aes(x = start, y = max_val, label = start),
+    vjust = -0.5,  # Adjust vertical position of labels
+    hjust = 0.5,   # Adjust horizontal position of labels
+    size = 3,       # Size of the labels
+    col = "orange2"
   )
-
 
 # Q3 Boxplot Comparison of Sequence Lengths for Even and Odd Starting Integers -
