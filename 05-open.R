@@ -4,6 +4,8 @@
 
 #Below is the Rcode examples to explore collatz conjecture sequences in distribution of odd and even numbers
 
+library(tidyverse)
+
 ## Function to generate Collatz sequence for a given starting integer
 collatz_sequence <- function(n) {
   sequence <- c(n)
