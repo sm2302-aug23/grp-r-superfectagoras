@@ -7,25 +7,35 @@ library(tidyverse)
 library(lintr)
 library(styler)
 library(dplyr)
+library(ggplot2)
 
 ## Initialize
 collatz_sequence <- collatz_df
 
-## Define the range of starting integers
-start_range <- 1
-end_range <- 10000
-
 ## Wrangle the data to identify odd and even numbers in each sequence
+## and Calculate the ratio
 collatz_sequence <- collatz_sequence %>%
-  mutate(is_odd = seq %% 2 == 1,
-         is_even = seq %% 2 == 0)
+  mutate(Even = sapply(seq, function(x) {sum(x %% 2 == 0)}),
+         Odd = sapply(seq, function(x) {sum(x %% 2 == 1 )}),
+         Even_Odd_Ratio = Even / Odd)
 
-## Explore and visualize the distribution of odd and even numbers
-## For example, create a histogram:
-library(ggplot2)
+## Calculate summary statistics for Odd, Even and Odd_Even_Ratio
+summary_data <- collatz_sequence %>%
+  gather(key = "type", value = "value", Even, Odd, Even_Odd_Ratio) %>%
+  group_by(type) %>%
+  summarize(
+    Average = mean(value),
+    Maximum = max(value)
+  )
 
-ggplot(collatz_df, aes(x = seq, fill = is_odd)) +
-  geom_histogram(binwidth = 1, position = "dodge") +
-  labs(x = "Value in Collatz Sequence", y = "Count") +
-  ggtitle("Distribution of Odd and Even Numbers in Collatz Sequences")
-  
+## Explore and visualize the distribution of even and odd numbers
+## For example, create a barchart:
+collatz_sequence %>%
+  gather(key = "type", value = "count", Even, Odd) %>%
+  ggplot(aes(x = count, y = type, fill = type)) +
+  geom_bar(stat = "identity", position = "fill") +
+  labs(title = "Statistics of Even & Odd Numbers in Collatz Sequences",
+       x = "Count",
+       y = "Number Type") +
+  theme_classic()
+
