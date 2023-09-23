@@ -18,20 +18,20 @@ end_range <- 10000
 ## Generate collatz sequences for each starting integer in the range and create a data frame
 collatz_df <- data.frame(
   starting_integer = rep(start_range:end_range, each = end_range - start_range + 1),
-  sequence = unlist(lappy(start_range:end_range, collatz_sequence))
+  seq = unlist(lappy(start_range:end_range, collatz_sequence))
 )
 
 ## Wrangle the data to identify odd and even numbers in each sequence
 collatz_df <- collatz_df %>%
-  mutate(is_odd = sequence %% 2 == 1,
-         is_even = sequence %% 2 == 0)
+  mutate(is_odd = seq %% 2 == 1,
+         is_even = seq %% 2 == 0)
 
 
 ## Explore and visualize the distribution of odd and even numbers
 ## For example, create a histogram:
 library(ggplot2)
 
-ggplot(collatz_df, aes(x = sequence, fill = is_odd)) +
+ggplot(collatz_df, aes(x = seq, fill = is_odd)) +
   geom_histogram(binwidth = 1, position = "dodge") +
   labs(x = "Value in Collatz Sequence", y = "Count") +
   ggtitle("Distribution of Odd and Even Numbers in Collatz Sequences")
