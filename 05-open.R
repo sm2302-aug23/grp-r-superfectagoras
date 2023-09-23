@@ -28,7 +28,8 @@ stopping_times <- sapply(starting_integers, collatz_stopping_time)
 ## Create a histogram of stopping times
 hist(stopping_times, breaks = 30, main = "Distribution of Collatz Stopping Times", xlab = "Stopping Time")
 
-## Calculate summary statistics 
+## Calculate summary statistics
+
 
 
 
