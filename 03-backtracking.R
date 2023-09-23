@@ -90,8 +90,7 @@ mode_calculator <- function(x) {
 
   # tally the numbers in the freq table
   for (i in x) {
-    # If the number in freq is not in unique_nums yet
-    # add it to unique_nums
+    # If the number in freq is not in unique_nums yet, add to unique_nums
     # also add one to num_freq index that represents the new number (last ind)
     # else, look for index where the number appears on unique_nums
     # and then add 1 to the same index in num_freq
