@@ -19,23 +19,20 @@ collatz_sequence <- collatz_sequence %>%
          Odd = sapply(seq, function(x) {sum(x %% 2 == 1 )}),
          Even_Odd_Ratio = Even / Odd)
 
-## Calculate summary statistics for Odd, Even and Odd_Even_Ratio
-summary_data <- collatz_sequence %>%
-  gather(key = "type", value = "value", Even, Odd, Even_Odd_Ratio) %>%
+## Summarize statistics for Even, Odd and Even_Odd_Ratio
+sum_even_odd <- collatz_sequence %>%
+  gather(key = "type", value = "value", Even, Odd) %>%
   group_by(type) %>%
   summarize(
     Average = mean(value),
     Maximum = max(value)
   )
 
-## Explore and visualize the distribution of even and odd numbers
-## For example, create a barchart:
-collatz_sequence %>%
-  gather(key = "type", value = "count", Even, Odd) %>%
-  ggplot(aes(x = count, y = type, fill = type)) +
-  geom_bar(stat = "identity", position = "fill") +
-  labs(title = "Statistics of Even & Odd Numbers in Collatz Sequences",
-       x = "Count",
-       y = "Number Type") +
-  theme_classic()
+whole_ratio <- collatz_sequence %>%
+  gather(key = "type", value = "value", Even_Odd_Ratio) %>%
+  group_by(type) %>%
+  summarize(
+    Average = mean(value),
+    Maximum = max(value)
+  )
 
