@@ -73,6 +73,13 @@ ggplot(data = collatz_df, aes(x = start, y = max_val)) +
   ) +
   scale_y_log10() # Add logarithmic scale to the y-axis
 
+# Q3 Comparing Sequence Lengths: Even vs. Odd Starting Integers ----------------
 
-
-# Q3 Comparing Sequence Lengths: Even vs. Odd Starting Numbers ----------------
+# Create a boxplot to compare the distributions
+ggplot(data = backtracks_df, aes(x = parity, y = length)) +
+  geom_boxplot(position = "dodge", fill = "violet", color = "grey4") +
+  labs(
+    title = "Sequence Lengths: Even vs Odd",
+    x = "Parity (Even/Odd)",
+    y = "Sequence Lengths"
+  )
