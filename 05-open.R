@@ -3,36 +3,36 @@
 # Question: Investigate if there are patterns or trends related to the occurrence of odd and even numbers across different starting integers
 
 #Below is the Rcode examples to explore collatz conjecture sequences in distribution of odd and even numbers
-
 library(tidyverse)
+library(lintr)
+library(styler)
+library(dplyr)
 
-## Function to generate Collatz sequence for a given starting integer
-collatz_sequence <- function(n) {
-  sequence <- c(n)
-  while (n != 1) {
-    if (n %% 2 == 0) {
-      n <- n / 2
-    } else {
-      n <- 3 * n + 1
-    }
-    sequence <- c(sequence, n)
-  }
-  return(sequence)
-}
+## Initialize
+collatz_sequence <- collatz_df
 
 ## Define the range of starting integers
 start_range <- 1
 end_range <- 10000
 
-## Generate Collatz sequences for each starting integer in the range
-sequences <- lapply(start_range:end_range, collatz_sequence)
+## Generate collatz sequences for each starting integer in the range and create a data frame
+collatz_df <- data.frame(
+  starting_integer = rep(start_range:end_range, each = end_range - start_range + 1),
+  sequence = unlist(lappy(start_range:end_range, collatz_sequence))
+)
 
-## Analyze the distribution of odd and even numbers in the sequences
-odd_even_counts <- sapply(sequences, function(seq) {
-  odd_count <- sum(seq %% 2 == 1)
-  even_count <- sum(seq %% 2 == 0)
-  return(list(odd_count = odd_count, even_count = even_count))
-})
+## Wrangle the data to identify odd and even numbers in each sequence
+collatz_df <- collatz_df %>%
+  mutate(is_odd = sequence %% 2 == 1,
+         is_even = sequence %% 2 == 0)
 
-## Visualize the distribution of odd and even numbers, or perform further analysis
 
+## Explore and visualize the distribution of odd and even numbers
+## For example, create a histogram:
+library(ggplot2)
+
+ggplot(collatz_df, aes(x = sequence, fill = is_odd)) +
+  geom_histogram(binwidth = 1, position = "dodge") +
+  labs(x = "Value in Collatz Sequence", y = "Count") +
+  ggtitle("Distribution of Odd and Even Numbers in Collatz Sequences")
+  
