@@ -13,6 +13,7 @@ knitr::opts_chunk$set(echo = TRUE)
 library(tidyverse)
 library(ggplot2)
 library(ggrepel)
+library(dplyr)
 ```
 
 ### The Collatz Generator Function
@@ -85,6 +86,12 @@ while (n <= 10000) {
 }
 ```
 
+### Resulting collatz_df 
+
+```{r collatz_df_result, echo=FALSE} 
+print(collatz_df)
+```
+
 ## Task 2: Exploratory Data Analysis
 
 ## Task 3: Investigating "Backtracking" In Sequences
@@ -133,6 +140,11 @@ backtracks_df <-
   filter(
     sapply(seq, backtrack)
   )
+```
+
+#### Resulting backtracks_df
+```{r backtracks_df_result, echo=FALSE}
+print(backtracks_df)
 ```
 
 ### Part 2: mode_backtrack
@@ -230,6 +242,11 @@ mode_backtrack <-
   pull(1)
 ```
 
+#### Resulting mode_backtrack
+```{r mode_backtrack_result, echo=FALSE}
+print(mode_backtrack)
+```
+
 ### Part 3: max_after_backtrack
 
 #### max_backtrack function to look for the highest number right after backtracks
@@ -285,6 +302,11 @@ max_after_backtrack <-
   pull(max_backtrack)
 ```
 
+#### Resulting max_after_backtrack
+```{r max_after_backtrack_result, echo=FALSE}
+print(max_after_backtrack)
+```
+
 ### Part 4: even_odd_backtrack
 
 #### Filtering for even_odd_backtrack
@@ -295,6 +317,11 @@ even_odd_backtrack <-
   backtracks_df %>%
   count(parity) %>%
   pull(n)
+```
+
+#### Resulting even_odd_backtrack
+```{r even_odd_backtrack_result, echo=FALSE}
+print(even_odd_backtrack)
 ```
 
 ## Task 4: Visualisations
@@ -410,11 +437,7 @@ Additionally, we also want to explore whether there is a relationship between ev
 - Calculate the average and maximum values for the `Even_Odd_Ratio`.
 
 #### Below is the Rcode used to answer our question
-``` r
-library(tidyverse)
-library(lintr)
-library(styler)
-library(dplyr)
+``` {r Task_5}
 
 # Initialize
 collatz_sequence <- collatz_df
@@ -462,40 +485,16 @@ By analyzing the Collatz sequences based from our Rcode above, we discovered the
 ##### Part 1: Collatz Sequence Table
 ```{r, echo=FALSE, collatz_sequence}
 print(collatz_sequence)
-collatz_sequence <- collatz_sequence %>%
-  mutate(
-    Even = sapply(seq, function(x) {
-      sum(x %% 2 == 0)
-    }),
-    Odd = sapply(seq, function(x) {
-      sum(x %% 2 == 1)
-    }),
-    Even_Odd_Ratio = Even / Odd
-  )
 ```
 
 ##### Part 2: Summary Statistics for Even and Odd Numbers Table
 ```{r, echo=FALSE, EvenOdd_Avg_Max}
 print(EvenOdd_Avg_Max)
-EvenOdd_Avg_Max <- collatz_sequence %>%
-  gather(key = "type", value = "value", Even, Odd) %>%
-  group_by(type) %>%
-  summarize(
-    Average = mean(value),
-    Maximum = max(value)
-  )
 ```
 
 ##### Part 2: Summary Statistics for Ratio Table
 ```{r, echo=FALSE, Ratio_Avg_Max}
 print(Ratio_Avg_Max)
-Ratio_Avg_Max <- collatz_sequence %>%
-  gather(key = "type", value = "value", Even_Odd_Ratio) %>%
-  group_by(type) %>%
-  summarize(
-    Average = mean(value),
-    Maximum = max(value)
-  )
 ```
 
 ### Implications
@@ -512,12 +511,9 @@ The analysis of Collatz Conjecture sequences reveals that these sequences exhibi
 
 ### Task 5
 #### 7.5.1 example of Rcode
-``` r
+``` {r collatz_sequence_plot_code}
 ## Explore and visualize the distribution of even and odd numbers
 ## For example, create a bar chart:
-library(tidyverse)
-library(ggplot2)
-
 collatz_sequence %>%
   gather(key = "type", value = "count", Odd, Even) %>%
   ggplot(aes(x = type, y = count, fill = type)) +
@@ -529,8 +525,7 @@ collatz_sequence %>%
 ```
 
 #### 7.5.2 bar chart
-```{r, echo=FALSE, collatz_sequence}
-print(count)
+```{r, echo=FALSE, collatz_sequence_plot}
 collatz_sequence %>%
   gather(key = "type", value = "count", Odd, Even) %>%
   ggplot(aes(x = type, y = count, fill = type)) +
