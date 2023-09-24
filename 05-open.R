@@ -1,13 +1,12 @@
 # Task 5
 
-# Question: Investigate if there are patterns or trends related to the occurrence of odd and even numbers across different starting integers
+# Question: What is the distribution of even and odd numbers in Collatz sequences?
 
 #Below is the Rcode examples to explore collatz conjecture sequences in distribution of odd and even numbers
 library(tidyverse)
 library(lintr)
 library(styler)
 library(dplyr)
-library(ggplot2)
 
 ## Initialize
 collatz_sequence <- collatz_df
@@ -20,7 +19,7 @@ collatz_sequence <- collatz_sequence %>%
          Even_Odd_Ratio = Even / Odd)
 
 ## Summarize statistics for Even, Odd and Even_Odd_Ratio
-sum_even_odd <- collatz_sequence %>%
+EvenOdd_Avg_Max <- collatz_sequence %>%
   gather(key = "type", value = "value", Even, Odd) %>%
   group_by(type) %>%
   summarize(
@@ -28,7 +27,7 @@ sum_even_odd <- collatz_sequence %>%
     Maximum = max(value)
   )
 
-whole_ratio <- collatz_sequence %>%
+Ratio_Avg_Max <- collatz_sequence %>%
   gather(key = "type", value = "value", Even_Odd_Ratio) %>%
   group_by(type) %>%
   summarize(
