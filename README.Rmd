@@ -388,7 +388,6 @@ These are the differences that I can notice based on my observations.
 
 1.  Overlap and Variability:
     -   The distribution of sequence lengths for even and odd starting integers shows a significant overlap, indicating that there is a wide range of sequence lengths for both groups.
-
     -   Even starting integers exhibit a broader range of sequence lengths, suggesting greater variability compared to odd starting integers.
 2.  Median length:
     -   The lower position of the median line (inside the box) for even integers compared to odd integers suggests that, on average, sequences starting with even integers tend to be shorter.
@@ -463,9 +462,15 @@ By analyzing the Collatz sequences based from our Rcode above, we discovered the
 ##### Part 1: Collatz Sequence Table
 ```{r, echo=FALSE}
 collatz_sequence <- collatz_sequence %>%
-  mutate(Even = sapply(seq, function(x) {sum(x %% 2 == 0)}),
-         Odd = sapply(seq, function(x) {sum(x %% 2 == 1 )}),
-         Even_Odd_Ratio = Even / Odd)
+  mutate(
+    Even = sapply(seq, function(x) {
+      sum(x %% 2 == 0)
+    }),
+    Odd = sapply(seq, function(x) {
+      sum(x %% 2 == 1)
+    }),
+    Even_Odd_Ratio = Even / Odd
+  )
 ```
 
 ##### Part 2: Summary Statistics for Even and Odd Numbers Table
@@ -526,9 +531,11 @@ collatz_sequence %>%
   gather(key = "type", value = "count", Odd, Even) %>%
   ggplot(aes(x = type, y = count, fill = type)) +
   geom_bar(stat = "identity") +
-  labs(title = "Counts of Odd & Even Numbers in Collatz Sequences",
-       x = "Number Type",
-       y = "Count") +
+  labs(
+    title = "Counts of Odd & Even Numbers in Collatz Sequences",
+    x = "Number Type",
+    y = "Count"
+  ) +
   theme_classic()
 ```
 
