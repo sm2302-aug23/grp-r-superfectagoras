@@ -448,7 +448,7 @@ By analyzing the Collatz sequences based from our Rcode above, we discovered the
 
 1. **Counts of Even and Odd Numbers**
    - The analysis revealed that in Collatz Conjecture sequences, there is a distribution of both even and odd numbers.
-   - The distribution shows that there are more even numbers compared to odd numbers (refer to [7.5.2](https://github.com/sm2302-aug23/grp-r-superfectagoras#example-of-bar-chart-visualization-of-the-distribution)).
+   - The distribution shows that there are more even numbers compared to odd numbers (refer to [7.5.2 bar chart](https://github.com/sm2302-aug23/grp-r-superfectagoras#example-of-bar-chart-visualization-of-the-distribution)).
    - The sum of both even and odd numbers individually from the respective sequences is computed.
 2. **Even-Odd Ratio**
    - The calculated `Even_Odd_Ratio` for each sequence varies individually but almost uniformly.
@@ -458,7 +458,7 @@ By analyzing the Collatz sequences based from our Rcode above, we discovered the
    - The summary statistics show the average and maximum counts for even and odd numbers (`EvenOdd_Avg_Max`), and even-odd ratios (`Ratio_Avg_Max`) in the sequences.
    - This information helps in understanding the central tendency and variability of even and odd numbers, even if there is a slight variance.
 
-#### Below are the output obtained after the Rcode computational run
+#### Below are the results obtained after the Rcode computational run
 ##### Part 1: Collatz Sequence Table
 ```{r, echo=FALSE, collatz_sequence}
 print(collatz_sequence)
