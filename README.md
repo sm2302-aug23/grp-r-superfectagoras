@@ -341,7 +341,7 @@ By analyzing the Collatz sequences based from our Rcode above, we discovered the
 
 1. **Counts of Even and Odd Numbers**
    - The analysis revealed that in Collatz Conjecture sequences, there is a distribution of both even and odd numbers.
-   - The distribution can be seen on both even and odd numbers, and it shows that there are more even numbers compared to odd numbers (refer to).
+   - The distribution can be seen on both even and odd numbers, and it shows that there are more even numbers compared to odd numbers (refer to [7.5.2](https://github.com/sm2302-aug23/grp-r-superfectagoras#example-of-bar-chart-visualization-of-the-distribution)).
    - The sum of both even and odd numbers individually from the respective sequences is computed.
 2. **Even-Odd Ratio**
    - The calculated `Even_Odd_Ratio` for each sequence varies individually but almost uniformly.
@@ -388,14 +388,16 @@ Ratio_Avg_Max <- collatz_sequence %>%
 - The summary statistics offer a concise overview of the data, aiding in comparisons and identifying sequences with unusual properties.
 
 ### Conclusion
-The analysis of Collatz Conjecture sequences reveals that these sequences exhibit a distribution of both even and odd numbers (refer to). The even-to-odd ratio varies across different sequences, with a few sequences having higher ratios than others. This information can contribute to a deeper understanding of the Collatz Conjecture sequences and their patterns.
+The analysis of Collatz Conjecture sequences reveals that these sequences exhibit a distribution of both even and odd numbers (refer to [7.5.2](https://github.com/sm2302-aug23/grp-r-superfectagoras#example-of-bar-chart-visualization-of-the-distribution)). The even-to-odd ratio varies across different sequences, with a few sequences having higher ratios than others. This information can contribute to a deeper understanding of the Collatz Conjecture sequences and their patterns.
+
+https://github.com/sm2302-aug23/grp-r-superfectagoras#example-of-bar-chart-visualization-of-the-distribution
 
 ## Task 6: Creative Visualisation Challenge
 
 ## Task 7 : Other Additional Data Informations
 
 ### Task 5
-#### example of Rcode visualization of the distribution
+#### 7.5.1 example of Rcode visualization of the distribution
 ``` r
 ## Explore and visualize the distribution of even and odd numbers
 ## For example, create a bar chart:
@@ -412,7 +414,7 @@ collatz_sequence %>%
   theme_classic()
 ```
 
-#### example of bar chart visualization of the distribution
+#### 7.5.2 example of bar chart visualization of the distribution
 ```{r, echo=FALSE}
 collatz_sequence %>%
   gather(key = "type", value = "count", Odd, Even) %>%
