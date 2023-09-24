@@ -390,8 +390,6 @@ Ratio_Avg_Max <- collatz_sequence %>%
 ### Conclusion
 The analysis of Collatz Conjecture sequences reveals that these sequences exhibit a distribution of both even and odd numbers (refer to [7.5.2](https://github.com/sm2302-aug23/grp-r-superfectagoras#example-of-bar-chart-visualization-of-the-distribution)). The even-to-odd ratio varies across different sequences, with a few sequences having higher ratios than others. This information can contribute to a deeper understanding of the Collatz Conjecture sequences and their patterns.
 
-https://github.com/sm2302-aug23/grp-r-superfectagoras#example-of-bar-chart-visualization-of-the-distribution
-
 ## Task 6: Creative Visualisation Challenge
 
 ## Task 7 : Other Additional Data Informations
