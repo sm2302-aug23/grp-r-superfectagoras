@@ -255,20 +255,20 @@ The following are the differences noted based on my observations:-
 - Such distribution is important because it indicates that a pattern or trend can be further analyzed using the Collatz Conjecture to make comparisons.
 - Below is how the column looks:
 
-    ## # A tibble: 10,000 × 8
-    ##    start seq        length parity max_val  Even   Odd Even_Odd_Ratio
-    ##    <dbl> <list>      <int> <chr>    <dbl> <int> <int>          <dbl>
-    ##  1     1 <dbl [1]>       1 ODD          1     0     1           0   
-    ##  2     2 <dbl [2]>       2 EVEN         2     1     1           1   
-    ##  3     3 <dbl [8]>       8 ODD         16     5     3           1.67
-    ##  4     4 <dbl [3]>       3 EVEN         4     2     1           2   
-    ##  5     5 <dbl [6]>       6 ODD         16     4     2           2   
-    ##  6     6 <dbl [9]>       9 EVEN        16     6     3           2   
-    ##  7     7 <dbl [17]>     17 ODD         52    11     6           1.83
-    ##  8     8 <dbl [4]>       4 EVEN         8     3     1           3   
-    ##  9     9 <dbl [20]>     20 ODD         52    13     7           1.86
-    ## 10    10 <dbl [7]>       7 EVEN        16     5     2           2.5 
-    ## # ℹ 9,990 more rows
+      ## # A tibble: 10,000 × 8
+      ##    start seq        length parity max_val  Even   Odd Even_Odd_Ratio
+      ##    <dbl> <list>      <int> <chr>    <dbl> <int> <int>          <dbl>
+      ##  1     1 <dbl [1]>       1 ODD          1     0     1           0   
+      ##  2     2 <dbl [2]>       2 EVEN         2     1     1           1   
+      ##  3     3 <dbl [8]>       8 ODD         16     5     3           1.67
+      ##  4     4 <dbl [3]>       3 EVEN         4     2     1           2   
+      ##  5     5 <dbl [6]>       6 ODD         16     4     2           2   
+      ##  6     6 <dbl [9]>       9 EVEN        16     6     3           2   
+      ##  7     7 <dbl [17]>     17 ODD         52    11     6           1.83
+      ##  8     8 <dbl [4]>       4 EVEN         8     3     1           3   
+      ##  9     9 <dbl [20]>     20 ODD         52    13     7           1.86
+      ## 10    10 <dbl [7]>       7 EVEN        16     5     2           2.5 
+      ## # ℹ 9,990 more rows
 
 #### Even-Odd Ratio
 
