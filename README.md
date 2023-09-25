@@ -74,32 +74,72 @@ Collatz Conjecture
 
 ## Task 4: Visualizations
 
-### Sequence lengths x Starting integers scatter plot
+#### Sequence lengths x Starting integers scatter plot
 
 1.  Objective
 
-- Create a scatter plot showing the relationship between starting
-  integers and sequence lengths.
-- Additionally, we want to identify and highlight the top 10 starting
-  integers with the longest sequences.
+- Create a scatter plot showing the correlation between sequence lengths
+  (y-axis) and starting integers (x-axis).
+- Additionally, we want to find the top 10 starting integers with the
+  longest sequences and highlight them.
 
 2.  How
 
-- By using ggplot, using data set `collatz_df` from task 1 and
-  `top10integers` from task 2. Highlighting the top 10 points by
-  adjusting the color, size and shape of the points.
-- Labeling the top 10 points using the `geom_text_repel()` function.
+- Using the ggplot function to plot the top10integers and collatz_df
+  data sets from tasks 1 and 2, respectively. Adjusting the color, size,
+  and shape of the points brings focus on the top 10 points.
+- Using the geom_text_repel() function to label the top 10 points.
 
-Here’s how the plot looks like;
-![<https://github.com/sm2302-aug23/grp-r-superfectagoras/blob/main/Seq%20lengths%20x%20Start%20integers.png>](Seq%20lengths%20x%20Start%20integers.png)
+Here’s how the plot for this scatter plot looks like;
+![<https://github.com/sm2302-aug23/grp-r-superfectagoras/blob/main/Start%20integers%20x%20Seq%20lengths.png>](Start%20integers%20x%20Seq%20lengths.png)
 
-The code for this scatter plot can be found in [04-plots.R](04-plots.R).
+The whole code for this scatter plot can be found in
+[04-plots.R](04-plots.R) in Q1.
 
-### Highest Sequence Value x Starting integers scatter plot
+#### Highest Sequence Value x Starting integers scatter plot
 
-### Even x Odd starting integers box plot
+1.  Objective
 
-These are the differences that I can notice based on my observations.
+- Similar to question 1, but with a relationship between the
+  starting integers (x-axis) and the highest sequence value (y-axis).
+
+2.  How
+
+- By using the ggplot function.
+- The scatter plot’s top 10 beginning integers with the highest sequence
+  value were given a distinct color that made them stand out. As a
+  result, it is simpler to find and examine these individual data
+  points.
+
+Here’s how the plot for this scatter plot looks like;
+![<https://github.com/sm2302-aug23/grp-r-superfectagoras/blob/main/high%20seq%20val%20x%20start%20integers.png>](high%20seq%20val%20x%20start%20integers.png)
+
+The whole code for this scatter plot can be found in
+[04-plots.R](04-plots.R) in Q2.
+
+#### Even x Odd starting integers box plot
+
+1.  Objective
+
+- To visually examine and compare the distributional characteristics of
+  sequence lengths for even and odd starting integers in order to gain
+  insights into their behavior and properties.
+
+2.  How
+
+- Similar to questions 1 and 2, make a box plot using ggplot for each
+  category (even and odd).
+- In these box plots, the y-axis represents the distribution of sequence
+  lengths, and the x-axis the parity (even and odd).
+
+Here’s how the plot for this scatter plot looks like;
+![<https://github.com/sm2302-aug23/grp-r-superfectagoras/blob/main/even%20x%20odd.png>](even%20x%20odd.png)
+
+The whole code for this scatter plot can be found in
+[04-plots.R](04-plots.R) in Q3.
+
+These are the few differences that I can notice based on my
+observations.
 
 1.  **Overlap and Variability:**
     - The distribution of sequence lengths for even and odd starting
