@@ -114,8 +114,8 @@ Collatz Conjecture
   and shape of the points brings focus on the top 10 points.
 - Using the geom_text_repel() function to label the top 10 points.
 
-Here’s how the plot for this scatter plot looks like;
-![<https://github.com/sm2302-aug23/grp-r-superfectagoras/blob/main/Start%20integers%20x%20Seq%20lengths.png>](Start%20integers%20x%20Seq%20lengths.png)
+Here’s how the plot for this scatter plot looks like:
+![](README_files/figure-gfm/Task_4_1-1.png)<!-- -->
 
 The whole code for this scatter plot can be found in
 [04-plots.R](04-plots.R) in Q1.
@@ -134,9 +134,12 @@ The whole code for this scatter plot can be found in
   value were given a distinct color that made them stand out. As a
   result, it is simpler to find and examine these individual data
   points.
+- Logarithmic scale was used for the y-axis as some of the values ended
+  up being much higher than the others, making the rest of the points
+  squished at the bottom originally.
 
-Here’s how the plot for this scatter plot looks like;
-![<https://github.com/sm2302-aug23/grp-r-superfectagoras/blob/main/high%20seq%20val%20x%20start%20integers.png>](high%20seq%20val%20x%20start%20integers.png)
+Here’s how the plot for this scatter plot looks like:
+![](README_files/figure-gfm/Task_4_2-1.png)<!-- -->
 
 The whole code for this scatter plot can be found in
 [04-plots.R](04-plots.R) in Q2.
@@ -156,8 +159,8 @@ The whole code for this scatter plot can be found in
 - In these box plots, the y-axis represents the distribution of sequence
   lengths, and the x-axis the parity (even and odd).
 
-Here’s how the plot for this scatter plot looks like;
-![<https://github.com/sm2302-aug23/grp-r-superfectagoras/blob/main/even%20x%20odd.png>](even%20x%20odd.png)
+Here’s how the plot for this scatter plot looks like:
+![](README_files/figure-gfm/Task_4_3-1.png)<!-- -->
 
 The whole code for this scatter plot can be found in
 [04-plots.R](04-plots.R) in Q3.

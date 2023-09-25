@@ -386,7 +386,41 @@ print(even_odd_backtrack)
 -   Using the ggplot function to plot the top10integers and collatz_df data sets from tasks 1 and 2, respectively. Adjusting the color, size, and shape of the points brings focus on the top 10 points.
 -   Using the geom_text_repel() function to label the top 10 points.
 
-Here's how the plot for this scatter plot looks like; ![https://github.com/sm2302-aug23/grp-r-superfectagoras/blob/main/Start%20integers%20x%20Seq%20lengths.png](Start integers x Seq lengths.png)
+Here's how the plot for this scatter plot looks like:
+```{r Task_4_1, echo=FALSE}
+# Filtering the top 10 results from collatz_df
+top10data <- collatz_df %>%
+  filter(start %in% top10longest)
+
+# Create complex plots from data in a data frame using ggplot
+ggplot(
+  data = collatz_df,
+  mapping = aes(
+    x = start,
+    y = length
+  )
+) +
+  # Create scatter plot and labelling
+  geom_point() +
+  labs(
+    title = "Starting Integers vs Sequence Lengths",
+    x = "Starting Integers",
+    y = "Sequence Lengths"
+  ) +
+  geom_point(
+    data = top10data, aes(x = start, y = length),
+    col = "red", size = 3, shape = 15
+  ) +
+  # To avoid overlaps by repelling text labels
+  geom_text_repel(
+    data = top10data,
+    aes(x = start, y = length, label = start),
+    vjust = -0.5,
+    hjust = 0.5,
+    size = 3
+  ) +
+  theme_classic()
+```
 
 The whole code for this scatter plot can be found in [04-plots.R](04-plots.R) in Q1.
 
@@ -400,8 +434,43 @@ The whole code for this scatter plot can be found in [04-plots.R](04-plots.R) in
 
 -   By using the ggplot function.
 -   The scatter plot's top 10 beginning integers with the highest sequence value were given a distinct color that made them stand out. As a result, it is simpler to find and examine these individual data points.
+-   Logarithmic scale was used for the y-axis as some of the values ended up being much higher than the others, making the rest of the points squished at the bottom originally.
 
-Here's how the plot for this scatter plot looks like; ![https://github.com/sm2302-aug23/grp-r-superfectagoras/blob/main/high%20seq%20val%20x%20start%20integers.png](high seq val x start integers.png)
+Here's how the plot for this scatter plot looks like:
+```{r Task_4_2, echo=FALSE}
+# Identifying the top 10 starting integers (highest value reached)
+top10highvalue <- collatz_df %>%
+  # rearranging the data frame or starting integers in descending manners
+  arrange(desc(max_val)) %>%
+  # selecting top 10 starting integers from above code
+  top_n(10, max_val)
+
+# Create the scatterplot for highest value vs. starting integers
+ggplot(data = collatz_df, aes(x = start, y = max_val)) +
+  geom_point() + # Scatterplot for all integers
+  labs(
+    title = "Highest Sequence Value vs. Starting Integers",
+    x = "Starting Integers",
+    y = "Highest Sequence Value"
+  ) +
+  geom_point(
+    data = top10highvalue,
+    aes(x = start, y = max_val),
+    col = "purple4", # Color for the top 10 starting integers
+    size = 2, # Size of the points for the top 10
+    shape = 15 # Shape of the points for the top 10 (square)
+  ) +
+  geom_text_repel(
+    data = top10highvalue,
+    aes(x = start, y = max_val, label = start),
+    vjust = -0.5, # Adjust vertical position of labels
+    hjust = 0.5, # Adjust horizontal position of labels
+    size = 3, # Size of the labels
+    col = "orange2" # Color for labeling top 10 value points
+  ) +
+  scale_y_log10() + # Add logarithmic scale to the y-axis
+  theme_classic()
+```
 
 The whole code for this scatter plot can be found in [04-plots.R](04-plots.R) in Q2.
 
@@ -416,7 +485,18 @@ The whole code for this scatter plot can be found in [04-plots.R](04-plots.R) in
 -   Similar to questions 1 and 2, make a box plot using ggplot for each category (even and odd).
 -   In these box plots, the y-axis represents the distribution of sequence lengths, and the x-axis the parity (even and odd).
 
-Here's how the plot for this scatter plot looks like; ![https://github.com/sm2302-aug23/grp-r-superfectagoras/blob/main/even%20x%20odd.png](even x odd.png)
+Here's how the plot for this scatter plot looks like:
+```{r Task_4_3, echo=FALSE}
+# Create a boxplot to compare the distributions
+ggplot(data = collatz_df, aes(x = parity, y = length, fill = parity)) +
+  geom_boxplot() +
+  labs(
+    title = "Sequence Lengths: Even vs Odd",
+    x = "Parity (Even/Odd)",
+    y = "Sequence Lengths"
+  ) +
+  theme_classic()
+```
 
 The whole code for this scatter plot can be found in [04-plots.R](04-plots.R) in Q3.
 
