@@ -384,14 +384,10 @@ We will explore the Collatz Conjecture to understand the distributions of odd an
 -   Calculate the average and maximum values for `Even` and `Odd` numbers.
 -   Calculate the average and maximum values for the `Even_Odd_Ratio`.
 
-<<<<<<< Updated upstream
 ```{r Task_5, include=FALSE}
 
-=======
 #### Below is the Rcode used to answer our question
 
-```{r Task_5}
->>>>>>> Stashed changes
 # Initialize
 collatz_sequence <- collatz_df
 
