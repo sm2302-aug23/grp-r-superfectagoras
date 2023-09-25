@@ -86,9 +86,9 @@ while (n <= 10000) {
 }
 ```
 
-### Resulting collatz_df 
+### Resulting collatz_df
 
-```{r collatz_df_result, echo=FALSE} 
+```{r collatz_df_result, echo=FALSE}
 print(collatz_df)
 ```
 
@@ -143,6 +143,7 @@ backtracks_df <-
 ```
 
 #### Resulting backtracks_df
+
 ```{r backtracks_df_result, echo=FALSE}
 print(backtracks_df)
 ```
@@ -243,6 +244,7 @@ mode_backtrack <-
 ```
 
 #### Resulting mode_backtrack
+
 ```{r mode_backtrack_result, echo=FALSE}
 print(mode_backtrack)
 ```
@@ -303,6 +305,7 @@ max_after_backtrack <-
 ```
 
 #### Resulting max_after_backtrack
+
 ```{r max_after_backtrack_result, echo=FALSE}
 print(max_after_backtrack)
 ```
@@ -320,6 +323,7 @@ even_odd_backtrack <-
 ```
 
 #### Resulting even_odd_backtrack
+
 ```{r even_odd_backtrack_result, echo=FALSE}
 print(even_odd_backtrack)
 ```
@@ -328,7 +332,7 @@ print(even_odd_backtrack)
 
 ### Sequence lengths x Starting integers scatterplot
 
-```{r sequencelengths_vs_startingintegers_scatterplot}
+```{r sequencelengths_vs_startingintegers scatterplot}
 ## Filtering the top 10 results from collatz_df
 top10data <- collatz_df %>%
   filter(start %in% top10longest)
@@ -360,11 +364,12 @@ ggplot(
     hjust = 0.5,
     size = 3
   )
+
 ```
 
 ### Highest Sequence Value x Starting integers scatter plot
 
-```{r highestsequencevalue_vs_startingintegers_scatterplot}
+```{r highestsequencevalue_vs_startingintegers scatterplot}
 # Identifying the top 10 starting integers (highest value reached)
 top10highvalue <- collatz_df %>%
   # rearranging the data frame or starting integers in descending manners
@@ -400,7 +405,7 @@ ggplot(data = collatz_df, aes(x = start, y = max_val)) +
 
 ### Even x Odd Starting integers boxplot distribution
 
-```{r even_vs_odd_boxplot}
+```{r even_vs_odd boxplot}
 # Create a boxplot to compare the distributions
 ggplot(data = collatz_df, aes(x = parity, y = length, fill = parity)) +
   geom_boxplot() +
@@ -422,22 +427,24 @@ These are the differences that I can notice based on my observations.
     -   Despite the lower median line for even integers, you've noted that the difference in average sequence length between even and odd starting integers is not substantial. In other words, both groups tend to have sequences of roughly similar average lengths.
 
 ## Task 5: Open-ended Exploration
+
 ### Question
+
 > What is the distribution of even and odd numbers in Collatz sequences?
 
-We will explore the Collatz Conjecture to understand the distributions of odd and even numbers within these sequences.
-Specifically, we want to estimate if there are patterns or trends related to the occurrence of odd and even numbers across different starting integers and visualize these distributions using R.
-Additionally, we also want to explore whether there is a relationship between even and odd numbers in terms of their ratio.
+We will explore the Collatz Conjecture to understand the distributions of odd and even numbers within these sequences. Specifically, we want to estimate if there are patterns or trends related to the occurrence of odd and even numbers across different starting integers and visualize these distributions using R. Additionally, we also want to explore whether there is a relationship between even and odd numbers in terms of their ratio.
 
 ### Methodology
-- Generate `collatz_sequence` using an existing data frame `collatz_df` from previous tasks by initialization.
-- Wrangle the data to identify `Even` and `Odd` numbers in each sequence and calculate the ratio of even to odd numbers (`Even_Odd_Ratio`).
-- Summarize statistics for even and odd numbers (`EvenOdd_Avg_Max`) and the `Even_Odd_Ratio` (`Ratio_Avg_Max`) separately.
-- Calculate the average and maximum values for `Even` and `Odd` numbers.
-- Calculate the average and maximum values for the `Even_Odd_Ratio`.
+
+-   Generate `collatz_sequence` using an existing data frame `collatz_df` from previous tasks by initialization.
+-   Wrangle the data to identify `Even` and `Odd` numbers in each sequence and calculate the ratio of even to odd numbers (`Even_Odd_Ratio`).
+-   Summarize statistics for even and odd numbers (`EvenOdd_Avg_Max`) and the `Even_Odd_Ratio` (`Ratio_Avg_Max`) separately.
+-   Calculate the average and maximum values for `Even` and `Odd` numbers.
+-   Calculate the average and maximum values for the `Even_Odd_Ratio`.
 
 #### Below is the Rcode used to answer our question
-``` {r Task_5}
+
+```{r Task_5}
 
 # Initialize
 collatz_sequence <- collatz_df
@@ -467,42 +474,49 @@ Ratio_Avg_Max <- collatz_sequence %>%
 ```
 
 ### Findings
+
 By analyzing the Collatz sequences based from our Rcode above, we discovered the following results:-
 
-1. **Counts of Even and Odd Numbers**
-   - The analysis revealed that in Collatz Conjecture sequences, there is a distribution of both even and odd numbers.
-   - The distribution shows that there are more even numbers compared to odd numbers (refer to [7.5.2 bar chart](https://github.com/sm2302-aug23/grp-r-superfectagoras#example-of-bar-chart-visualization-of-the-distribution)).
-   - The sum of both even and odd numbers individually from the respective sequences is computed.
-2. **Even-Odd Ratio**
-   - The calculated `Even_Odd_Ratio` for each sequence varies individually but almost uniformly.
-   - Such analysis can provide information about the average and maximum `Even_Odd_Ratio` observed in the Collatz sequences.
-   - If this result is visualized in a graph, one can see that it is mostly likely to showcase uniformity.
-3. **Summary Statistics**
-   - The summary statistics show the average and maximum counts for even and odd numbers (`EvenOdd_Avg_Max`), and even-odd ratios (`Ratio_Avg_Max`) in the sequences.
-   - This information helps in understanding the central tendency and variability of even and odd numbers, even if there is a slight variance.
+1.  **Counts of Even and Odd Numbers**
+    -   The analysis revealed that in Collatz Conjecture sequences, there is a distribution of both even and odd numbers.
+    -   The distribution shows that there are more even numbers compared to odd numbers (refer to [7.5.2 bar chart](https://github.com/sm2302-aug23/grp-r-superfectagoras#example-of-bar-chart-visualization-of-the-distribution)).
+    -   The sum of both even and odd numbers individually from the respective sequences is computed.
+2.  **Even-Odd Ratio**
+    -   The calculated `Even_Odd_Ratio` for each sequence varies individually but almost uniformly.
+    -   Such analysis can provide information about the average and maximum `Even_Odd_Ratio` observed in the Collatz sequences.
+    -   If this result is visualized in a graph, one can see that it is mostly likely to showcase uniformity.
+3.  **Summary Statistics**
+    -   The summary statistics show the average and maximum counts for even and odd numbers (`EvenOdd_Avg_Max`), and even-odd ratios (`Ratio_Avg_Max`) in the sequences.
+    -   This information helps in understanding the central tendency and variability of even and odd numbers, even if there is a slight variance.
 
 #### Below are the results obtained after the Rcode computational run
+
 ##### Part 1: Collatz Sequence Table
+
 ```{r, echo=FALSE, collatz_sequence}
 print(collatz_sequence)
 ```
 
 ##### Part 2: Summary Statistics for Even and Odd Numbers Table
+
 ```{r, echo=FALSE, EvenOdd_Avg_Max}
 print(EvenOdd_Avg_Max)
 ```
 
 ##### Part 2: Summary Statistics for Ratio Table
+
 ```{r, echo=FALSE, Ratio_Avg_Max}
 print(Ratio_Avg_Max)
 ```
 
 ### Implications
-- Understanding the distribution of even and odd numbers in Collatz Conjecture sequences can provide insights into the behavior of these sequences and their properties.
-- The variations in even-odd ratios suggest that Collatz sequences exhibit diverse patterns. Further analysis might reveal patterns or characteristics associated with sequences that have high or low even-odd ratios.
-- The summary statistics offer a concise overview of the data, aiding in comparisons and identifying sequences with unusual properties.
+
+-   Understanding the distribution of even and odd numbers in Collatz Conjecture sequences can provide insights into the behavior of these sequences and their properties.
+-   The variations in even-odd ratios suggest that Collatz sequences exhibit diverse patterns. Further analysis might reveal patterns or characteristics associated with sequences that have high or low even-odd ratios.
+-   The summary statistics offer a concise overview of the data, aiding in comparisons and identifying sequences with unusual properties.
 
 ### Conclusion
+
 The analysis of Collatz Conjecture sequences reveals that these sequences exhibit a distribution of both even and odd numbers (refer to [7.5.2 bar chart](https://github.com/sm2302-aug23/grp-r-superfectagoras#example-of-bar-chart-visualization-of-the-distribution)). The even-to-odd ratio varies across different sequences, with a few sequences having higher ratios than others. This information can contribute to a deeper understanding of the Collatz Conjecture sequences and their patterns.
 
 ## Task 6: Creative Visualisation Challenge
@@ -510,8 +524,10 @@ The analysis of Collatz Conjecture sequences reveals that these sequences exhibi
 ## Task 7 : Other Data
 
 ### Task 5
+
 #### 7.5.1 example of Rcode
-``` {r collatz_sequence_plot_code}
+
+```{r collatz_sequence_plot_code}
 ## Explore and visualize the distribution of even and odd numbers
 ## For example, create a bar chart:
 collatz_sequence %>%
@@ -525,6 +541,7 @@ collatz_sequence %>%
 ```
 
 #### 7.5.2 bar chart
+
 ```{r, echo=FALSE, collatz_sequence_plot}
 collatz_sequence %>%
   gather(key = "type", value = "count", Odd, Even) %>%
