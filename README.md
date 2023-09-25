@@ -3,75 +3,20 @@ Collatz Conjecture
 
 ## Task 1: Generating The Collatz Conjecture
 
-### The Collatz Generator Function
-
-``` r
-# accepts a single integer
-gen_collatz <- function(n) {
-  # Input should all be numerical
-  if (is.numeric(n) == FALSE) {
-    stop("Invalid input: Not a numerical value")
-  }
-
-  # Input should all be integers
-  if ((n == as.integer(n)) == FALSE) {
-    stop("Invalid input: Not an integer")
-  }
-
-  # Input should be 1 or more
-  if (n < 1) {
-    stop("Invalid input: Value is less than 1")
-  }
-
-  # Initialize values
-  current <- n
-  seq <- c(n)
-
-  # The actual function
-  while (current > 1) {
-    # check if odd or even
-    if (current %% 2 == 0) {
-      current <- current / 2
-    } else {
-      current <- (current * 3) + 1
-    }
-
-    # save the new number into the sequence
-    seq <- c(seq, current)
-  }
-
-  # return the sequence
-  return(seq)
-}
-```
-
-### Creating The Collatz Database
-
-``` r
-collatz_df <- tibble(
-  "start" = 1,
-  "seq" = list(gen_collatz(1)),
-  "length" = length(unlist(seq)),
-  "parity" = ifelse((start %% 2) == 0, "EVEN", "ODD"),
-  "max_val" = max(unlist(seq))
-)
-
-n <- 2
-
-while (n <= 10000) {
-  collatz_df <-
-    collatz_df %>%
-    add_row(
-      "start" = n,
-      "seq" = list(gen_collatz(n)),
-      "length" = length(unlist(seq)),
-      "parity" = ifelse((start %% 2) == 0, "EVEN", "ODD"),
-      "max_val" = max(unlist(seq))
-    )
-
-  n <- n + 1
-}
-```
+    ## # A tibble: 10,000 × 5
+    ##    start seq        length parity max_val
+    ##    <dbl> <list>      <int> <chr>    <dbl>
+    ##  1     1 <dbl [1]>       1 ODD          1
+    ##  2     2 <dbl [2]>       2 EVEN         2
+    ##  3     3 <dbl [8]>       8 ODD         16
+    ##  4     4 <dbl [3]>       3 EVEN         4
+    ##  5     5 <dbl [6]>       6 ODD         16
+    ##  6     6 <dbl [9]>       9 EVEN        16
+    ##  7     7 <dbl [17]>     17 ODD         52
+    ##  8     8 <dbl [4]>       4 EVEN         8
+    ##  9     9 <dbl [20]>     20 ODD         52
+    ## 10    10 <dbl [7]>       7 EVEN        16
+    ## # ℹ 9,990 more rows
 
 ## Task 2: Exploratory Data Analysis
 
@@ -79,354 +24,219 @@ while (n <= 10000) {
 
 ### Part 1: backtracks_df
 
-#### backtrack function for use in filtering
+#### Resulting backtracks_df
 
-``` r
-## function backtrack to check for backtracking
-backtrack <- function(x) {
-  # initialize
-  initial <- x[1]
-  current <- 2
-  below_init <- FALSE
-  above_init <- FALSE
-
-  while (current <= length(x)) {
-    # check for when current value is less than initial
-    if (x[current] < initial) {
-      below_init <- TRUE
-    }
-
-    # check for when current value is higher than initial
-    # but only after below_init is TRUE
-    if ((x[current] > initial) &&
-          (below_init == TRUE)) {
-      above_init <- TRUE
-    }
-
-    # increment current by 1
-    current <- current + 1
-  }
-
-  # Both must be TRUE to be considered backtracking
-  ifelse(below_init & above_init, TRUE, FALSE)
-}
-```
-
-#### Filtering for backtracks_df
-
-``` r
-## doing the actual filtering with the function
-backtracks_df <-
-  collatz_df %>%
-  filter(
-    sapply(seq, backtrack)
-  )
-```
+    ## # A tibble: 8,229 × 5
+    ##    start seq        length parity max_val
+    ##    <dbl> <list>      <int> <chr>    <dbl>
+    ##  1     6 <dbl [9]>       9 EVEN        16
+    ##  2     7 <dbl [17]>     17 ODD         52
+    ##  3     9 <dbl [20]>     20 ODD         52
+    ##  4    10 <dbl [7]>       7 EVEN        16
+    ##  5    11 <dbl [15]>     15 ODD         52
+    ##  6    12 <dbl [10]>     10 EVEN        16
+    ##  7    13 <dbl [10]>     10 ODD         40
+    ##  8    14 <dbl [18]>     18 EVEN        52
+    ##  9    15 <dbl [18]>     18 ODD        160
+    ## 10    17 <dbl [13]>     13 ODD         52
+    ## # ℹ 8,219 more rows
 
 ### Part 2: mode_backtrack
 
-#### backtrack_count for counting number of backtracks in a sequence
+#### Resulting mode_backtrack
 
-``` r
-## backtrack count
-backtrack_count <- function(x) {
-  # initialize
-  initial <- x[1]
-  current <- 2
-  below_init <- FALSE
-  above_init <- FALSE
-  counter <- 0
-
-  while (current <= length(x)) {
-    # check for when current value is less than initial
-    if (x[current] < initial &&
-          (below_init == FALSE)) {
-      below_init <- TRUE
-    }
-
-    # check for when current value is higher than initial
-    # but only after below_init is TRUE
-    if ((x[current] > initial) &&
-          (below_init == TRUE) &&
-          (above_init == FALSE)) {
-      above_init <- TRUE
-    }
-
-    # if below_init and above_init is true, add 1 to counter
-    # immediately change back the variables to their FALSE state
-    if (below_init && above_init) {
-      counter <- counter + 1
-      below_init <- FALSE
-      above_init <- FALSE
-    }
-
-    # increment current by 1
-    current <- current + 1
-  }
-
-  # returns the backtrack count for each sequences
-  return(counter)
-}
-```
-
-#### mode_calculator for counting the mode for number of backtracks
-
-``` r
-mode_calculator <- function(x) {
-  # initialize
-  unique_nums <- c()
-  num_freq <- c()
-
-  # tally the numbers in the freq table
-  for (i in x) {
-    # If the number in freq is not in unique_nums yet, add to unique_nums
-    # also add one to num_freq index that represents the new number (last ind)
-    # else, look for index where the number appears on unique_nums
-    # and then add 1 to the same index in num_freq
-    if ((i %in% unique_nums) == FALSE) {
-      unique_nums <- c(unique_nums, i)
-      num_freq <- c(num_freq, 1)
-    } else {
-      index <- which(unique_nums == i)
-      num_freq[index] <- num_freq[index] + 1
-    }
-  }
-
-  # Find the index of the highest frequency
-  # then find the number represented by that frequency
-  index <- which(num_freq == max(num_freq))
-  mode_freq <- unique_nums[index]
-
-
-  # return the mode
-  return(mode_freq)
-}
-```
-
-#### Filtering for mode_backtrack
-
-``` r
-## doing the actual filtering with backtrack_count
-mode_backtrack <-
-  backtracks_df %>%
-  mutate(
-    "freq" = sapply(seq, backtrack_count)
-  ) %>%
-  summarize(
-    "mode" = mode_calculator(freq)
-  ) %>%
-  pull(1)
-```
+    ## [1] 1
 
 ### Part 3: max_after_backtrack
 
-#### max_backtrack function to look for the highest number right after backtracks
+#### Resulting max_after_backtrack
 
-``` r
-## function to find the max after first backtrack
-max_backtrack <- function(x) {
-  # initialize
-  initial <- x[1]
-  current <- 2
-  below_init <- FALSE
-  above_init <- FALSE
-  max_val <- 0
-
-  while (current <= length(x)) {
-    # check for when current value is less than initial
-    if (x[current] < initial) {
-      below_init <- TRUE
-    }
-
-    # check for when current value is higher than initial
-    # but only after below_init is TRUE
-    if ((x[current] > initial) &&
-          (below_init == TRUE)) {
-      above_init <- TRUE
-    }
-
-    # if below_init and above_init is true, start checking for max_val
-    if (below_init && above_init) {
-      if (x[current] > max_val) {
-        max_val <- x[current]
-      }
-    }
-
-    # increment current by 1
-    current <- current + 1
-  }
-
-  # return the max_val
-  return(max_val)
-}
-```
-
-#### Filtering for max_after_backtrack
-
-``` r
-## doing the actual filtering with max_after_backtrack
-max_after_backtrack <-
-  backtracks_df %>%
-  mutate(
-    "max_backtrack" = sapply(seq, max_backtrack)
-  ) %>%
-  pull(max_backtrack)
-```
+    ## # A tibble: 8,229 × 1
+    ##    max_after_backtrack
+    ##                  <dbl>
+    ##  1                  16
+    ##  2                  16
+    ##  3                  52
+    ##  4                  16
+    ##  5                  16
+    ##  6                  16
+    ##  7                  16
+    ##  8                  52
+    ##  9                  16
+    ## 10                  40
+    ## # ℹ 8,219 more rows
 
 ### Part 4: even_odd_backtrack
 
-#### Filtering for even_odd_backtrack
+#### Resulting even_odd_backtrack
 
-``` r
-## only need to filter by parity
-even_odd_backtrack <-
-  backtracks_df %>%
-  count(parity) %>%
-  pull(n)
-```
+    ## [1] 3943 4286
 
-## Task 4: Visualisations
+## Task 4: Visualizations
+
+### Sequence lengths x Starting integers scatter plot
+
+1.  Objective
+
+- Create a scatter plot showing the relationship between starting
+  integers and sequence lengths.
+- Additionally, we want to identify and highlight the top 10 starting
+  integers with the longest sequences.
+
+2.  How
+
+- By using ggplot, using data set `collatz_df` from task 1 and
+  `top10integers` from task 2. Highlighting the top 10 points by
+  adjusting the color, size and shape of the points.
+- Labeling the top 10 points using the `geom_text_repel()` function.
+
+Here’s how the plot looks like;
+![<https://github.com/sm2302-aug23/grp-r-superfectagoras/blob/main/Seq%20lengths%20x%20Start%20integers.png>](Seq%20lengths%20x%20Start%20integers.png)
+
+The code for this scatter plot can be found in [04-plots.R](04-plots.R).
+
+### Highest Sequence Value x Starting integers scatter plot
+
+### Even x Odd starting integers box plot
+
+These are the differences that I can notice based on my observations.
+
+1.  **Overlap and Variability:**
+    - The distribution of sequence lengths for even and odd starting
+      integers shows a significant overlap, indicating that there is a
+      wide range of sequence lengths for both groups.
+    - Even starting integers exhibit a broader range of sequence
+      lengths, suggesting greater variability compared to odd starting
+      integers.
+2.  **Median length:**
+    - The lower position of the median line (inside the box) for even
+      integers compared to odd integers suggests that, on average,
+      sequences starting with even integers tend to be shorter.
+3.  **Similar average length:**
+    - Despite the lower median line for even integers, you’ve noted that
+      the difference in average sequence length between even and odd
+      starting integers is not substantial. In other words, both groups
+      tend to have sequences of roughly similar average lengths.
 
 ## Task 5: Open-ended Exploration
+
 ### Question
+
 > What is the distribution of even and odd numbers in Collatz sequences?
 
-We will explore the Collatz Conjecture to understand the distributions of odd and even numbers within these sequences.
-Specifically, we want to estimate if there are patterns or trends related to the occurrence of odd and even numbers across different starting integers and visualize these distributions using R.
-Additionally, we also want to explore whether there is a relationship between even and odd numbers in terms of their ratio.
+We will explore the Collatz Conjecture to understand the distributions
+of odd and even numbers within these sequences. Specifically, we want to
+estimate if there are patterns or trends related to the occurrence of
+odd and even numbers across different starting integers and visualize
+these distributions using R. Additionally, we also want to explore
+whether there is a relationship between even and odd numbers in terms of
+their ratio.
 
 ### Methodology
-- Generate `collatz_sequence` using an existing data frame `collatz_df` from previous tasks by initialization.
-- Wrangle the data to identify `Even` and `Odd` numbers in each sequence and calculate the ratio of even to odd numbers (`Even_Odd_Ratio`).
-- Summarize statistics for even and odd numbers (`EvenOdd_Avg_Max`) and the `Even_Odd_Ratio` (`Ratio_Avg_Max`) separately.
+
+- Generate `collatz_sequence` using an existing data frame `collatz_df`
+  from previous tasks by initialization.
+- Wrangle the data to identify `Even` and `Odd` numbers in each sequence
+  and calculate the ratio of even to odd numbers (`Even_Odd_Ratio`).
+- Summarize statistics for even and odd numbers (`EvenOdd_Avg_Max`) and
+  the `Even_Odd_Ratio` (`Ratio_Avg_Max`) separately.
 - Calculate the average and maximum values for `Even` and `Odd` numbers.
 - Calculate the average and maximum values for the `Even_Odd_Ratio`.
 
-#### Below is the Rcode used to answer our question
-``` r
-library(tidyverse)
-library(lintr)
-library(styler)
-library(dplyr)
-
-# Initialize
-collatz_sequence <- collatz_df
-
-# Wrangle the data to identify odd and even numbers in each sequence and Calculate the ratio
-collatz_sequence <- collatz_sequence %>%
-  mutate(Even = sapply(seq, function(x) {sum(x %% 2 == 0)}),
-         Odd = sapply(seq, function(x) {sum(x %% 2 == 1 )}),
-         Even_Odd_Ratio = Even / Odd)
-
-# Summarize statistics for Even, Odd and Even_Odd_Ratio
-EvenOdd_Avg_Max <- collatz_sequence %>%
-  gather(key = "type", value = "value", Even, Odd) %>%
-  group_by(type) %>%
-  summarize(
-    Average = mean(value),
-    Maximum = max(value)
-  )
-
-Ratio_Avg_Max <- collatz_sequence %>%
-  gather(key = "type", value = "value", Even_Odd_Ratio) %>%
-  group_by(type) %>%
-  summarize(
-    Average = mean(value),
-    Maximum = max(value)
-  )
-```
-
 ### Findings
-By analyzing the Collatz sequences based from our Rcode above, we discovered the following results:-
 
-1. **Counts of Even and Odd Numbers**
-   - The analysis revealed that in Collatz Conjecture sequences, there is a distribution of both even and odd numbers.
-   - The distribution shows that there are more even numbers compared to odd numbers (refer to [7.5.2 bar chart](https://github.com/sm2302-aug23/grp-r-superfectagoras#example-of-bar-chart-visualization-of-the-distribution)).
-   - The sum of both even and odd numbers individually from the respective sequences is computed.
-2. **Even-Odd Ratio**
-   - The calculated `Even_Odd_Ratio` for each sequence varies individually but almost uniformly.
-   - Such analysis can provide information about the average and maximum `Even_Odd_Ratio` observed in the Collatz sequences.
-   - If this result is visualized in a graph, one can see that it is mostly likely to showcase uniformity.
-3. **Summary Statistics**
-   - The summary statistics show the average and maximum counts for even and odd numbers (`EvenOdd_Avg_Max`), and even-odd ratios (`Ratio_Avg_Max`) in the sequences.
-   - This information helps in understanding the central tendency and variability of even and odd numbers, even if there is a slight variance.
+By analyzing the Collatz sequences based from our Rcode above, we
+discovered the following results:-
+
+1.  **Counts of Even and Odd Numbers**
+    - The analysis revealed that in Collatz Conjecture sequences, there
+      is a distribution of both even and odd numbers.
+    - The distribution shows that there are more even numbers compared
+      to odd numbers (refer to [7.5.2 bar
+      chart](https://github.com/sm2302-aug23/grp-r-superfectagoras#example-of-bar-chart-visualization-of-the-distribution)).
+    - The sum of both even and odd numbers individually from the
+      respective sequences is computed.
+2.  **Even-Odd Ratio**
+    - The calculated `Even_Odd_Ratio` for each sequence varies
+      individually but almost uniformly.
+    - Such analysis can provide information about the average and
+      maximum `Even_Odd_Ratio` observed in the Collatz sequences.
+    - If this result is visualized in a graph, one can see that it is
+      mostly likely to showcase uniformity.
+3.  **Summary Statistics**
+    - The summary statistics show the average and maximum counts for
+      even and odd numbers (`EvenOdd_Avg_Max`), and even-odd ratios
+      (`Ratio_Avg_Max`) in the sequences.
+    - This information helps in understanding the central tendency and
+      variability of even and odd numbers, even if there is a slight
+      variance.
 
 #### Below are the results obtained after the Rcode computational run
+
 ##### Part 1: Collatz Sequence Table
-```{r, echo=FALSE, collatz_sequence}
-print(collatz_sequence)
-collatz_sequence <- collatz_sequence %>%
-  mutate(Even = sapply(seq, function(x) {sum(x %% 2 == 0)}),
-         Odd = sapply(seq, function(x) {sum(x %% 2 == 1 )}),
-         Even_Odd_Ratio = Even / Odd)
-```
+
+    ## # A tibble: 10,000 × 8
+    ##    start seq        length parity max_val  Even   Odd Even_Odd_Ratio
+    ##    <dbl> <list>      <int> <chr>    <dbl> <int> <int>          <dbl>
+    ##  1     1 <dbl [1]>       1 ODD          1     0     1           0   
+    ##  2     2 <dbl [2]>       2 EVEN         2     1     1           1   
+    ##  3     3 <dbl [8]>       8 ODD         16     5     3           1.67
+    ##  4     4 <dbl [3]>       3 EVEN         4     2     1           2   
+    ##  5     5 <dbl [6]>       6 ODD         16     4     2           2   
+    ##  6     6 <dbl [9]>       9 EVEN        16     6     3           2   
+    ##  7     7 <dbl [17]>     17 ODD         52    11     6           1.83
+    ##  8     8 <dbl [4]>       4 EVEN         8     3     1           3   
+    ##  9     9 <dbl [20]>     20 ODD         52    13     7           1.86
+    ## 10    10 <dbl [7]>       7 EVEN        16     5     2           2.5 
+    ## # ℹ 9,990 more rows
 
 ##### Part 2: Summary Statistics for Even and Odd Numbers Table
-```{r, echo=FALSE, EvenOdd_Avg_Max}
-print(EvenOdd_Avg_Max)
-EvenOdd_Avg_Max <- collatz_sequence %>%
-  gather(key = "type", value = "value", Even, Odd) %>%
-  group_by(type) %>%
-  summarize(
-    Average = mean(value),
-    Maximum = max(value)
-  )
-```
 
-##### Part 2: Summary Statistics for Ratio Table
-```{r, echo=FALSE, Ratio_Avg_Max}
-print(Ratio_Avg_Max)
-Ratio_Avg_Max <- collatz_sequence %>%
-  gather(key = "type", value = "value", Even_Odd_Ratio) %>%
-  group_by(type) %>%
-  summarize(
-    Average = mean(value),
-    Maximum = max(value)
-  )
-```
+    ## # A tibble: 2 × 3
+    ##   type  Average Maximum
+    ##   <chr>   <dbl>   <int>
+    ## 1 Even     56.8     165
+    ## 2 Odd      29.2      97
+
+##### Part 3: Summary Statistics for Ratio Table
+
+    ## # A tibble: 1 × 3
+    ##   type           Average Maximum
+    ##   <chr>            <dbl>   <dbl>
+    ## 1 Even_Odd_Ratio    2.18      13
 
 ### Implications
-- Understanding the distribution of even and odd numbers in Collatz Conjecture sequences can provide insights into the behavior of these sequences and their properties.
-- The variations in even-odd ratios suggest that Collatz sequences exhibit diverse patterns. Further analysis might reveal patterns or characteristics associated with sequences that have high or low even-odd ratios.
-- The summary statistics offer a concise overview of the data, aiding in comparisons and identifying sequences with unusual properties.
+
+- Understanding the distribution of even and odd numbers in Collatz
+  Conjecture sequences can provide insights into the behavior of these
+  sequences and their properties.
+- The variations in even-odd ratios suggest that Collatz sequences
+  exhibit diverse patterns. Further analysis might reveal patterns or
+  characteristics associated with sequences that have high or low
+  even-odd ratios.
+- The summary statistics offer a concise overview of the data, aiding in
+  comparisons and identifying sequences with unusual properties.
 
 ### Conclusion
-The analysis of Collatz Conjecture sequences reveals that these sequences exhibit a distribution of both even and odd numbers (refer to [7.5.2 bar chart](https://github.com/sm2302-aug23/grp-r-superfectagoras#example-of-bar-chart-visualization-of-the-distribution)). The even-to-odd ratio varies across different sequences, with a few sequences having higher ratios than others. This information can contribute to a deeper understanding of the Collatz Conjecture sequences and their patterns.
+
+The analysis of Collatz Conjecture sequences reveals that these
+sequences exhibit a distribution of both even and odd numbers (refer to
+[7.5.2 bar
+chart](https://github.com/sm2302-aug23/grp-r-superfectagoras#example-of-bar-chart-visualization-of-the-distribution)).
+The even-to-odd ratio varies across different sequences, with a few
+sequences having higher ratios than others. This information can
+contribute to a deeper understanding of the Collatz Conjecture sequences
+and their patterns.
 
 ## Task 6: Creative Visualisation Challenge
 
-## Task 7 : Other Additional Data Informations
+## Task 7 : Other Data
 
 ### Task 5
-#### 7.5.1 example of Rcode
-``` r
-## Explore and visualize the distribution of even and odd numbers
-## For example, create a bar chart:
-library(tidyverse)
-library(ggplot2)
 
-collatz_sequence %>%
-  gather(key = "type", value = "count", Odd, Even) %>%
-  ggplot(aes(x = type, y = count, fill = type)) +
-  geom_bar(stat = "identity") +
-  labs(title = "Counts of Odd & Even Numbers in Collatz Sequences",
-       x = "Number Type",
-       y = "Count") +
-  theme_classic()
-```
+#### 7.5.1 Counts of Odd & Even Numbers in Collatz Sequences
 
-#### 7.5.2 bar chart
-```{r, echo=FALSE, count}
-print(count)
-collatz_sequence %>%
-  gather(key = "type", value = "count", Odd, Even) %>%
-  ggplot(aes(x = type, y = count, fill = type)) +
-  geom_bar(stat = "identity") +
-  labs(title = "Counts of Odd & Even Numbers in Collatz Sequences",
-       x = "Number Type",
-       y = "Count") +
-  theme_classic()
-```
+![](README_files/figure-gfm/collatz_sequence_plot_code-1.png)<!-- -->
 
 ## Contributors
 

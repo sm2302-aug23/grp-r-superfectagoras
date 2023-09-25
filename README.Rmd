@@ -16,9 +16,7 @@ library(ggrepel)
 library(dplyr)
 ```
 
-### The Collatz Generator Function
-
-```{r gen_collatz}
+```{r gen_collatz, include=FALSE}
 # accepts a single integer
 gen_collatz <- function(n) {
   # Input should all be numerical
@@ -58,9 +56,7 @@ gen_collatz <- function(n) {
 }
 ```
 
-### Creating The Collatz Database
-
-```{r collatz_df}
+```{r collatz_df, include=FALSE}
 collatz_df <- tibble(
   "start" = 1,
   "seq" = list(gen_collatz(1)),
@@ -86,8 +82,6 @@ while (n <= 10000) {
 }
 ```
 
-### Resulting collatz_df
-
 ```{r collatz_df_result, echo=FALSE}
 print(collatz_df)
 ```
@@ -98,9 +92,7 @@ print(collatz_df)
 
 ### Part 1: backtracks_df
 
-#### backtrack function for use in filtering
-
-```{r backtrack}
+```{r backtrack, include=FALSE}
 ## function backtrack to check for backtracking
 backtrack <- function(x) {
   # initialize
@@ -131,9 +123,7 @@ backtrack <- function(x) {
 }
 ```
 
-#### Filtering for backtracks_df
-
-```{r backtracks_df}
+```{r backtracks_df, include=FALSE}
 ## doing the actual filtering with the function
 backtracks_df <-
   collatz_df %>%
@@ -150,9 +140,7 @@ print(backtracks_df)
 
 ### Part 2: mode_backtrack
 
-#### backtrack_count for counting number of backtracks in a sequence
-
-```{r backtrack_count}
+```{r backtrack_count, include=FALSE}
 ## backtrack count
 backtrack_count <- function(x) {
   # initialize
@@ -194,9 +182,7 @@ backtrack_count <- function(x) {
 }
 ```
 
-#### mode_calculator for counting the mode for number of backtracks
-
-```{r mode_calculator}
+```{r mode_calculator, include=FALSE}
 mode_calculator <- function(x) {
   # initialize
   unique_nums <- c()
@@ -228,9 +214,7 @@ mode_calculator <- function(x) {
 }
 ```
 
-#### Filtering for mode_backtrack
-
-```{r mode_backtrack}
+```{r mode_backtrack, include=FALSE}
 ## doing the actual filtering with backtrack_count
 mode_backtrack <-
   backtracks_df %>%
@@ -251,9 +235,7 @@ print(mode_backtrack)
 
 ### Part 3: max_after_backtrack
 
-#### max_backtrack function to look for the highest number right after backtracks
-
-```{r max_backtrack}
+```{r max_backtrack, include=FALSE}
 ## function to find the max after first backtrack
 max_backtrack <- function(x) {
   # initialize
@@ -292,9 +274,7 @@ max_backtrack <- function(x) {
 }
 ```
 
-#### Filtering for max_after_backtrack
-
-```{r max_after_backtrack}
+```{r max_after_backtrack, include=FALSE}
 ## doing the actual filtering with max_after_backtrack
 max_after_backtrack <-
   backtracks_df %>%
@@ -307,14 +287,12 @@ max_after_backtrack <-
 #### Resulting max_after_backtrack
 
 ```{r max_after_backtrack_result, echo=FALSE}
-print(max_after_backtrack)
+print(tibble(max_after_backtrack))
 ```
 
 ### Part 4: even_odd_backtrack
 
-#### Filtering for even_odd_backtrack
-
-```{r even_odd_backtrack}
+```{r even_odd_backtrack, include=FALSE}
 ## only need to filter by parity
 even_odd_backtrack <-
   backtracks_df %>%
@@ -352,12 +330,12 @@ The code for this scatter plot can be found in [04-plots.R](04-plots.R).
 
 These are the differences that I can notice based on my observations.
 
-1.  Overlap and Variability:
+1.  **Overlap and Variability:**
     -   The distribution of sequence lengths for even and odd starting integers shows a significant overlap, indicating that there is a wide range of sequence lengths for both groups.
     -   Even starting integers exhibit a broader range of sequence lengths, suggesting greater variability compared to odd starting integers.
-2.  Median length:
+2.  **Median length:**
     -   The lower position of the median line (inside the box) for even integers compared to odd integers suggests that, on average, sequences starting with even integers tend to be shorter.
-3.  Similar average length:
+3.  **Similar average length:**
     -   Despite the lower median line for even integers, you've noted that the difference in average sequence length between even and odd starting integers is not substantial. In other words, both groups tend to have sequences of roughly similar average lengths.
 
 ## Task 5: Open-ended Exploration
@@ -376,9 +354,7 @@ We will explore the Collatz Conjecture to understand the distributions of odd an
 -   Calculate the average and maximum values for `Even` and `Odd` numbers.
 -   Calculate the average and maximum values for the `Even_Odd_Ratio`.
 
-#### Below is the Rcode used to answer our question
-
-```{r Task_5}
+```{r Task_5, include=FALSE}
 
 # Initialize
 collatz_sequence <- collatz_df
@@ -427,19 +403,19 @@ By analyzing the Collatz sequences based from our Rcode above, we discovered the
 
 ##### Part 1: Collatz Sequence Table
 
-```{r, echo=FALSE, collatz_sequence}
+```{r collatz_sequence, echo=FALSE}
 print(collatz_sequence)
 ```
 
 ##### Part 2: Summary Statistics for Even and Odd Numbers Table
 
-```{r, echo=FALSE, EvenOdd_Avg_Max}
+```{r EvenOdd_Avg_Max, echo=FALSE}
 print(EvenOdd_Avg_Max)
 ```
 
-##### Part 2: Summary Statistics for Ratio Table
+##### Part 3: Summary Statistics for Ratio Table
 
-```{r, echo=FALSE, Ratio_Avg_Max}
+```{r Ratio_Avg_Max, echo=FALSE}
 print(Ratio_Avg_Max)
 ```
 
@@ -459,9 +435,9 @@ The analysis of Collatz Conjecture sequences reveals that these sequences exhibi
 
 ### Task 5
 
-#### 7.5.1 example of Rcode
+#### 7.5.1 Counts of Odd & Even Numbers in Collatz Sequences
 
-```{r collatz_sequence_plot_code}
+```{r collatz_sequence_plot_code, echo=FALSE}
 ## Explore and visualize the distribution of even and odd numbers
 ## For example, create a bar chart:
 collatz_sequence %>%
@@ -471,21 +447,6 @@ collatz_sequence %>%
   labs(title = "Counts of Odd & Even Numbers in Collatz Sequences",
        x = "Number Type",
        y = "Count") +
-  theme_classic()
-```
-
-#### 7.5.2 bar chart
-
-```{r, echo=FALSE, collatz_sequence_plot}
-collatz_sequence %>%
-  gather(key = "type", value = "count", Odd, Even) %>%
-  ggplot(aes(x = type, y = count, fill = type)) +
-  geom_bar(stat = "identity") +
-  labs(
-    title = "Counts of Odd & Even Numbers in Collatz Sequences",
-    x = "Number Type",
-    y = "Count"
-  ) +
   theme_classic()
 ```
 
