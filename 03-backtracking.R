@@ -4,7 +4,7 @@ library(tidyverse)
 
 # ---------------------------- backtracks_df ----------------------------------
 
-## function backtrack to check for backtracking
+## function backtrack to check for backtracking inside sequences
 backtrack <- function(x) {
   # initialize
   initial <- x[1]
@@ -36,13 +36,14 @@ backtrack <- function(x) {
 ## doing the actual filtering with the function
 backtracks_df <-
   collatz_df %>%
+  # only keep integers which sequences will make backtrack function output TRUE
   filter(
     sapply(seq, backtrack)
   )
 
 # -------------------------- mode_backtrack -----------------------------------
 
-## backtrack count
+## backtrack_count to count the number of backtracks in a sequence
 backtrack_count <- function(x) {
   # initialize
   initial <- x[1]
@@ -82,7 +83,7 @@ backtrack_count <- function(x) {
   return(counter)
 }
 
-## mode calculator
+## mode_calculator to find the mode for the freq column
 mode_calculator <- function(x) {
   # initialize
   unique_nums <- c()
@@ -108,20 +109,22 @@ mode_calculator <- function(x) {
   index <- which(num_freq == max(num_freq))
   mode_freq <- unique_nums[index]
 
-
   # return the mode
   return(mode_freq)
 }
 
-## doing the actual filtering with backtrack_count
+## doing the actual filtering with backtrack_count and mode_calculator
 mode_backtrack <-
   backtracks_df %>%
+  # add freq, whose values come from backtrack_count with seq as argument
   mutate(
     "freq" = sapply(seq, backtrack_count)
   ) %>%
+  # summarizes the whole data using result from using mode_calculator with freq
   summarize(
     "mode" = mode_calculator(freq)
   ) %>%
+  # gets the first value from the tibble so it comes out as a vector/double
   pull(1)
 
 # -------------------------- max_after_backtrack ------------------------------
@@ -163,12 +166,14 @@ max_backtrack <- function(x) {
   return(max_val)
 }
 
-## doing the actual filtering with max_after_backtrack
+## doing the actual filtering with max_backtrack
 max_after_backtrack <-
   backtracks_df %>%
+  # adds max_backtrack whose values come from using max_backtrack with seq
   mutate(
     "max_backtrack" = sapply(seq, max_backtrack)
   ) %>%
+  # pulls the new column as a vector
   pull(max_backtrack)
 
 # ----------------------- even_odd_backtrack ----------------------------------
@@ -176,5 +181,7 @@ max_after_backtrack <-
 ## only need to filter by parity
 even_odd_backtrack <-
   backtracks_df %>%
+  # counts the number of Even and Odd integers in backtracks_df
   count(parity) %>%
+  # pulls the n column as a vector
   pull(n)

@@ -18,9 +18,31 @@ Collatz Conjecture
     ## 10    10 <dbl [7]>       7 EVEN        16
     ## # ℹ 9,990 more rows
 
-The whole code for this generating the Collatz Conjecture sequence can be found in [01-gen_collatz.R](01-gen_collatz.R).
-
 ## Task 2: Exploratory Data Analysis
+
+### Part 1: top10longest
+
+#### Resulting top10longest
+
+    ##  [1] 6171 9257 6943 7963 8959 6591 9887 9897 7422 7423
+
+### Part 2: max_val_int
+
+#### Resulting max_val_int
+
+    ## [1] 9663
+
+### Part 3: even_odd_avg_len and even_odd_sd_len
+
+#### Resulting even_odd_avg_len and even_odd_sd_len
+
+##### even_odd_avg_len
+
+    ## [1] 79.5936 92.3396
+
+##### even_odd_sd_len
+
+    ## [1] 45.10308 47.18387
 
 ## Task 3: Investigating “Backtracking” In Sequences
 
@@ -43,15 +65,11 @@ The whole code for this generating the Collatz Conjecture sequence can be found 
     ## 10    17 <dbl [13]>     13 ODD         52
     ## # ℹ 8,219 more rows
 
-The whole code for this `backtracks_df` can be found in [03-backtracking.R](03-backtracking.R).
-
 ### Part 2: mode_backtrack
 
 #### Resulting mode_backtrack
 
     ## [1] 1
-
-The whole code for this `mode_backtrack` can be found in [03-backtracking.R](03-backtracking.R).
 
 ### Part 3: max_after_backtrack
 
@@ -72,28 +90,24 @@ The whole code for this `mode_backtrack` can be found in [03-backtracking.R](03-
     ## 10                  40
     ## # ℹ 8,219 more rows
 
-The whole code for this `max_after_backtrack` can be found in [03-backtracking.R](03-backtracking.R).
-
 ### Part 4: even_odd_backtrack
 
 #### Resulting even_odd_backtrack
 
     ## [1] 3943 4286
 
-The whole code for this `even_odd_backtrack` can be found in [03-backtracking.R](03-backtracking.R).
-
 ## Task 4: Visualizations
 
 #### Sequence lengths x Starting integers scatter plot
 
-1.  Objective
+1.  **Objective**
 
 - Create a scatter plot showing the correlation between sequence lengths
   (y-axis) and starting integers (x-axis).
 - Additionally, we want to find the top 10 starting integers with the
   longest sequences and highlight them.
 
-2.  How
+2.  **How**
 
 - Using the ggplot function to plot the top10integers and collatz_df
   data sets from tasks 1 and 2, respectively. Adjusting the color, size,
@@ -108,12 +122,12 @@ The whole code for this scatter plot can be found in
 
 #### Highest Sequence Value x Starting integers scatter plot
 
-1.  Objective
+1.  **Objective**
 
 - Similar to question 1, but with a relationship between the starting
   integers (x-axis) and the highest sequence value (y-axis).
 
-2.  How
+2.  **How**
 
 - By using the ggplot function.
 - The scatter plot’s top 10 beginning integers with the highest sequence
@@ -129,13 +143,13 @@ The whole code for this scatter plot can be found in
 
 #### Even x Odd starting integers box plot
 
-1.  Objective
+1.  **Objective**
 
 - To visually examine and compare the distributional characteristics of
   sequence lengths for even and odd starting integers in order to gain
   insights into their behavior and properties.
 
-2.  How
+2.  **How**
 
 - Similar to questions 1 and 2, make a box plot using ggplot for each
   category (even and odd).
@@ -174,48 +188,24 @@ observations.
 
 > What is the distribution of even and odd numbers in Collatz sequences?
 
-Objectives
-- We will explore the Collatz Conjecture to understand the distributions
-of odd and even numbers within these sequences.
-- Specifically, we want to
+We will explore the Collatz Conjecture to understand the distributions
+of odd and even numbers within these sequences. Specifically, we want to
 estimate if there are patterns or trends related to the occurrence of
 odd and even numbers across different starting integers and visualize
-these distributions using R.
-- Additionally, we also want to explore
+these distributions using R. Additionally, we also want to explore
 whether there is a relationship between even and odd numbers in terms of
 their ratio.
 
 ### Methodology
 
-**Counts of Even and Odd Numbers**
-
-1.Objective
-
-- This is to calculate the sum of even and odd numbers, respectively, from each sequence.
-- It's purpose is to see how the distribution between even and odd numbers looks like and how much of a difference there is between them
-
-2.How
-
 - Generate `collatz_sequence` using an existing data frame `collatz_df`
   from previous tasks by initialization.
-- Wrangle the data to identify `Even` and `Odd` numbers in each sequence by mutating it.
-
-This part of the code can be found in [05-open.R](05-open.R) under mutate.
-
-**Even-Odd Ratio**
-
-1.Objective
-- This part is to 
-
-2.How
-
-- Calculate the ratio of even to odd numbers (`Even_Odd_Ratio`).
+- Wrangle the data to identify `Even` and `Odd` numbers in each sequence
+  and calculate the ratio of even to odd numbers (`Even_Odd_Ratio`).
 - Summarize statistics for even and odd numbers (`EvenOdd_Avg_Max`) and
   the `Even_Odd_Ratio` (`Ratio_Avg_Max`) separately.
 - Calculate the average and maximum values for `Even` and `Odd` numbers.
 - Calculate the average and maximum values for the `Even_Odd_Ratio`.
-
-The whole code for this can be found in [05-open.R](05-open.R).
 
 ### Findings
 
@@ -226,13 +216,16 @@ discovered the following results:-
     - The analysis revealed that in Collatz Conjecture sequences, there
       is a distribution of both even and odd numbers.
     - The distribution shows that there are more even numbers compared
-      to odd numbers (refer to [7.5.1 Counts of Odd & Even Numbers in Collatz Sequences](https://github.com/sm2302-aug23/grp-r-superfectagoras#751-counts-of-odd--even-numbers-in-collatz-sequences)).
+      to odd numbers (refer to [7.5.1 Counts of Odd & Even Numbers in
+      Collatz
+      Sequences](https://github.com/sm2302-aug23/grp-r-superfectagoras#751-counts-of-odd--even-numbers-in-collatz-sequences)).
     - The sum of both even and odd numbers individually from the
-      respective sequences are computed.
+      respective sequences is computed.
 2.  **Even-Odd Ratio**
     - The calculated `Even_Odd_Ratio` for each sequence varies
       individually but almost uniformly.
-    - 
+    - Such analysis can provide information about the average and
+      maximum `Even_Odd_Ratio` observed in the Collatz sequences.
     - If this result is visualized in a graph, one can see that it is
       mostly likely to showcase uniformity.
 3.  **Summary Statistics**
@@ -292,7 +285,9 @@ discovered the following results:-
 ### Conclusion
 
 The analysis of Collatz Conjecture sequences reveals that these
-sequences exhibit a distribution of both even and odd numbers (refer to [7.5.1 Counts of Odd & Even Numbers in Collatz Sequences](https://github.com/sm2302-aug23/grp-r-superfectagoras#751-counts-of-odd--even-numbers-in-collatz-sequences)).
+sequences exhibit a distribution of both even and odd numbers (refer to
+[7.5.1 Counts of Odd & Even Numbers in Collatz
+Sequences](https://github.com/sm2302-aug23/grp-r-superfectagoras#751-counts-of-odd--even-numbers-in-collatz-sequences)).
 The even-to-odd ratio varies across different sequences, with a few
 sequences having higher ratios than others. This information can
 contribute to a deeper understanding of the Collatz Conjecture sequences
@@ -308,20 +303,18 @@ and their patterns.
 
 ![](README_files/figure-gfm/collatz_sequence_plot_code-1.png)<!-- -->
 
-The whole code for this bar chart can be found in [07-other.R](07-other.R) under *Task 5 graph*.
-
 ## Contributors
 
-- **Task 1:** Waqi
+- **Task 1:** Waqi :computer: :sparkles:
 
-- **Task 2:** Ros
+- **Task 2:** Ros :octocat: :wilted_flower:
 
-- **Task 3:** Waqi
+- **Task 3:** Waqi :computer: :sparkles:
 
-- **Task 4:** Wana
+- **Task 4:** Wana :books: :pill:
 
-- **Task 5:** Fizah
+- **Task 5:** Fizah :partly_sunny: :milky_way:
 
-- **Task 6:** Ros
+- **Task 6:** Ros :octocat: :wilted_flower:
 
 - **README:** All

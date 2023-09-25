@@ -88,6 +88,72 @@ print(collatz_df)
 
 ## Task 2: Exploratory Data Analysis
 
+### Part 1: top10longest
+
+```{r top10longest, include=FALSE}
+## 1. Find the top 10 integers that produce the longest sequence.
+
+top10longest <- collatz_df %>%
+  arrange(desc(length)) %>%
+  head(10) %>%
+  pull("start")
+```
+
+#### Resulting top10longest
+
+```{r top10longest_result, echo=FALSE}
+print(top10longest)
+```
+
+### Part 2: max_val_int
+
+```{r max_val_int, include=FALSE}
+max_val_int <- collatz_df %>%
+  arrange(desc(max_val)) %>%
+  head(1) %>%
+  pull("start")
+```
+
+#### Resulting max_val_int
+
+```{r max_val_int_result, echo=FALSE}
+print(max_val_int)
+```
+
+### Part 3: even_odd_avg_len and even_odd_sd_len
+
+```{r even_odd_avg_sd_len, include=FALSE}
+# Getting all the length of all even starting integers.
+even_len <- collatz_df %>%
+  filter(parity == "EVEN") %>%
+  pull("length")
+
+# Getting all the length of all odd starting integers.
+odd_len <- collatz_df %>%
+  filter(parity == "ODD") %>%
+  pull("length")
+
+# Comparing the average of even starting integers length with odd ones.
+even_odd_avg_len <- c(mean(even_len), mean(odd_len))
+
+# Comparing the standard deviation of
+# even starting integers length with odd ones.
+even_odd_sd_len <- c(sd(even_len), sd(odd_len))
+```
+
+#### Resulting even_odd_avg_len and even_odd_sd_len
+
+##### even_odd_avg_len
+
+```{r even_odd_avg_len_result, echo=FALSE}
+print(even_odd_avg_len)
+```
+
+##### even_odd_sd_len
+```{r even_odd_sd_len_result, echo=FALSE}
+print(even_odd_sd_len)
+```
+
 ## Task 3: Investigating "Backtracking" In Sequences
 
 ### Part 1: backtracks_df
@@ -310,12 +376,12 @@ print(even_odd_backtrack)
 
 #### Sequence lengths x Starting integers scatter plot
 
-1.  Objective
+1.  **Objective**
 
 -   Create a scatter plot showing the correlation between sequence lengths (y-axis) and starting integers (x-axis).
 -   Additionally, we want to find the top 10 starting integers with the longest sequences and highlight them.
 
-2.  How
+2.  **How**
 
 -   Using the ggplot function to plot the top10integers and collatz_df data sets from tasks 1 and 2, respectively. Adjusting the color, size, and shape of the points brings focus on the top 10 points.
 -   Using the geom_text_repel() function to label the top 10 points.
@@ -326,11 +392,11 @@ The whole code for this scatter plot can be found in [04-plots.R](04-plots.R) in
 
 #### Highest Sequence Value x Starting integers scatter plot
 
-1.  Objective
+1.  **Objective**
 
 -   Similar to question 1, but with a relationship between the starting integers (x-axis) and the highest sequence value (y-axis).
 
-2.  How
+2.  **How**
 
 -   By using the ggplot function.
 -   The scatter plot's top 10 beginning integers with the highest sequence value were given a distinct color that made them stand out. As a result, it is simpler to find and examine these individual data points.
@@ -341,11 +407,11 @@ The whole code for this scatter plot can be found in [04-plots.R](04-plots.R) in
 
 #### Even x Odd starting integers box plot
 
-1.  Objective
+1.  **Objective**
 
 -   To visually examine and compare the distributional characteristics of sequence lengths for even and odd starting integers in order to gain insights into their behavior and properties.
 
-2.  How
+2.  **How**
 
 -   Similar to questions 1 and 2, make a box plot using ggplot for each category (even and odd).
 -   In these box plots, the y-axis represents the distribution of sequence lengths, and the x-axis the parity (even and odd).
@@ -488,16 +554,16 @@ collatz_sequence %>%
 
 ## Contributors
 
--   **Task 1:** Waqi
+-   **Task 1:** Waqi :computer: :sparkles:
 
--   **Task 2:** Ros
+-   **Task 2:** Ros :octocat: :wilted_flower:
 
--   **Task 3:** Waqi
+-   **Task 3:** Waqi :computer: :sparkles:
 
--   **Task 4:** Wana
+-   **Task 4:** Wana :books: :pill:
 
--   **Task 5:** Fizah
+-   **Task 5:** Fizah :partly_sunny: :milky_way:
 
--   **Task 6:** Ros
+-   **Task 6:** Ros :octocat: :wilted_flower:
 
 -   **README:** All

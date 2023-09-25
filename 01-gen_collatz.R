@@ -46,6 +46,7 @@ gen_collatz <- function(n) {
 }
 
 # Time to create a tibble!
+## intiializing the tibble with values for integer 1 first
 collatz_df <- tibble(
   "start" = 1,
   "seq" = list(gen_collatz(1)),
@@ -56,6 +57,7 @@ collatz_df <- tibble(
 
 n <- 2
 
+## Generates values for additional integers from 2:10000 for the tibble
 while (n <= 10000) {
   collatz_df <-
     collatz_df %>%

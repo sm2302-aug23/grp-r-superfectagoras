@@ -38,7 +38,7 @@ ggplot(
     hjust = 0.5,
     size = 3
   ) +
-  theme_classic() 
+  theme_classic()
 
 # Q2 Scatter plot of Highest Sequence Value vs. Starting Integers -------------
 
@@ -74,7 +74,7 @@ ggplot(data = collatz_df, aes(x = start, y = max_val)) +
   ) +
   scale_y_log10() + # Add logarithmic scale to the y-axis
   theme_classic()
-  
+
 # Q3 Comparing Sequence Lengths: Even vs. Odd Starting Integers ----------------
 
 # Create a boxplot to compare the distributions
