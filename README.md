@@ -287,7 +287,7 @@ and their patterns.
 
 ![](README_files/figure-gfm/collatz_sequence_plot_code-1.png)<!-- -->
 
-The whole code for this bar chart can be found in [07-other.R]07-other.R) under *Task 5 graph*.
+The whole code for this bar chart can be found in [07-other.R](07-other.R) under *Task 5 graph*.
 
 ## Contributors
 
