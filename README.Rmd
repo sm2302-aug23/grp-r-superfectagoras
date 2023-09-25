@@ -321,8 +321,7 @@ print(even_odd_backtrack)
 -   Using the geom_text_repel() function to label the top 10 points.
 
 Here's how the plot for this scatter plot looks like;
-
-![<https://github.com/sm2302-aug23/grp-r-superfectagoras/blob/main/Seq%20lengths%20x%20Start%20integers.png>](Seq%20lengths%20x%20Start%20integers.png)
+![<https://github.com/sm2302-aug23/grp-r-superfectagoras/blob/main/Start%20integers%20x%20Seq%20lengths.png>](Start%20integers%20x%20Seq%20lengths.png)
 
 The whole code for this scatter plot can be found in [04-plots.R](04-plots.R) in Q1.
 
@@ -338,8 +337,7 @@ The whole code for this scatter plot can be found in [04-plots.R](04-plots.R) in
 -   The scatter plot's top 10 beginning integers with the highest sequence value were given a distinct color that made them stand out. As a result, it is simpler to find and examine these individual data points.
 
 Here's how the plot for this scatter plot looks like;
-
-![<https://github.com/sm2302-aug23/grp-r-superfectagoras/blob/main/High%20seq%20value%20x%20Start%20integers.png>](High%20seq%20value%20x%20Start%20integers.png)
+![<https://github.com/sm2302-aug23/grp-r-superfectagoras/blob/main/high%20seq%20val%20x%20start%20integers.png>](high%20seq%20val%20x%20start%20integers.png)
 
 The whole code for this scatter plot can be found in [04-plots.R](04-plots.R) in Q2.
 
@@ -354,7 +352,8 @@ The whole code for this scatter plot can be found in [04-plots.R](04-plots.R) in
 -   Similar to questions 1 and 2, make a box plot using ggplot for each category (even and odd).
 -   In these box plots, the y-axis represents the distribution of sequence lengths, and the x-axis the parity (even and odd).
 
-Here's how the plot for this scatter plot looks like; ![https://github.com/sm2302-aug23/grp-r-superfectagoras/blob/main/Even%20x%20Odd%20starting%20integers.png](Even%20x%20Odd%20starting%20integers.png)
+Here's how the plot for this scatter plot looks like;
+![https://github.com/sm2302-aug23/grp-r-superfectagoras/blob/main/even%20x%20odd.png](even%20x%20odd.png)
 
 The whole code for this scatter plot can be found in [04-plots.R](04-plots.R) in Q3.
 
