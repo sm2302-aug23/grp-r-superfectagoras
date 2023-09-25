@@ -320,4 +320,8 @@ and their patterns.
 
 - **Task 6:** Ros :octocat: :wilted_flower:
 
-- **README:** All
+- **Task 7:** Fizah & Ros :partly_sunny: :milky_way: :octocat:
+  :wilted_flower:
+
+- **README:** All :computer: :sparkles: :octocat: :wilted_flower:
+  :books: :pill: :partly_sunny: :milky_way:

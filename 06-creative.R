@@ -1,27 +1,67 @@
-# Task 6
+parity_table <- 
+  tibble(
+    "ints" = rep(1:10000, times = 2),
+    "even_odds_count" = c(collatz_sequence$even, collatz_sequence$odd)
+  ) %>%
+  arrange(ints) %>%
+  mutate(
+    "parity" = rep(c("Even", "Odd"), times = 10000)
+  )
 
-library(ggplot2)
+count <- parity_table$even_odds_count
+parity_df <- parity_table[rep(seq_len(nrow(parity_table)), times = count), ]
 
-## 1. Heatmap showcasing the absolute length difference of random pairs of starting integers.
+parity_df %>%
+  ggplot(
+    aes(
+      x = ints,
+      fill = parity
+    )
+  ) +
+  
+  geom_histogram(
+    binwidth = 1,
+    position = "fill") +
+  
+  theme_classic()
 
-### Making pairs of random starting integers
-pairs_df <- collatz_df %>%
-  expand(start1 = start, start2 = start)
+## Another way of plotting ratio
 
-### Calculating the absolute difference between the length of the pairs
-pairs_df <- pairs_df %>%
-  mutate(abs_length_diff = abs(length[start == start1] - length[start == start2]))
+odd_wins <-
+  collatz_sequence %>%
+  filter(even_odd_ratio <= 1)
 
-### Making the heatmap of the absolute length difference 
-heatmap_plot <- ggplot(pairs_df, aes(x = start1,
-                                     y = start2,
-                                     fill = abs_length_diff)) +
-  geom_tile() +
-  scale_fill_gradient(low = "blue",
-                      high = "red") +
-  labs(title = "Collatz Conjecture Heatmap - Absolute Length Difference",
-       x = "1st Starting Integer",
-       y = "2nd Starting Integer") +
-  theme_minimal()
+top10ratio <-
+  collatz_sequence %>%
+  arrange(desc(even_odd_ratio)) %>%
+  slice(1:10)
 
-print(heatmap_plot)
+collatz_sequence %>%
+  ggplot(
+    aes(
+      x = start,
+      y = even_odd_ratio
+    )
+  ) +
+  
+  geom_point(
+  ) +
+  
+  geom_point(
+    data = odd_wins,
+    color = "red"
+  ) +
+  
+  geom_point(
+    data = top10ratio,
+    color = "blue",
+    size = 1.5
+  ) +
+  
+  geom_text_repel(
+    data = top10ratio,
+    aes(label = start,
+        vjust = -0.5)
+  ) +
+  
+  theme_classic()
