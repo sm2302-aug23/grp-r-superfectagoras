@@ -328,93 +328,27 @@ even_odd_backtrack <-
 print(even_odd_backtrack)
 ```
 
-## Task 4: Visualisations
+## Task 4: Visualizations
 
-### Sequence lengths x Starting integers scatterplot
+### Sequence lengths x Starting integers scatter plot
 
-```{r sequencelengths_vs_startingintegers scatterplot}
-## Filtering the top 10 results from collatz_df
-top10data <- collatz_df %>%
-  filter(start %in% top10longest)
+1.  Objective
 
-# Create complex plots from data in a data frame using ggplot
-ggplot(
-  data = collatz_df,
-  mapping = aes(
-    x = start,
-    y = length
-  )
-) +
-  # Create scatter plot and labelling
-  geom_point() +
-  labs(
-    title = "Starting Integers vs Sequence Lengths",
-    x = "Starting Integers",
-    y = "Sequence Lengths"
-  ) +
-  geom_point(
-    data = top10data, aes(x = start, y = length),
-    col = "red", size = 3, shape = 15
-  ) +
-  # To avoid overlaps by repelling text labels
-  geom_text_repel(
-    data = top10data,
-    aes(x = start, y = length, label = start),
-    vjust = -0.5,
-    hjust = 0.5,
-    size = 3
-  )
+-   Create a scatter plot showing the relationship between starting integers and sequence lengths.
+-   Additionally, we want to identify and highlight the top 10 starting integers with the longest sequences.
 
-```
+2.  How
+
+-   By using ggplot, using data set `collatz_df` from task 1 and `top10integers` from task 2. Highlighting the top 10 points by adjusting the color, size and shape of the points.
+-   Labeling the top 10 points using the `geom_text_repel()` function.
+
+Here's how the plot looks like; ![https://github.com/sm2302-aug23/grp-r-superfectagoras/blob/main/Seq%20lengths%20x%20Start%20integers.png](Seq%20lengths%20x%20Start%20integers.png)
+
+The code for this scatter plot can be found in [04-plots.R](04-plots.R).
 
 ### Highest Sequence Value x Starting integers scatter plot
 
-```{r highestsequencevalue_vs_startingintegers scatterplot}
-# Identifying the top 10 starting integers (highest value reached)
-top10highvalue <- collatz_df %>%
-  # rearranging the data frame or starting integers in descending manners
-  arrange(desc(max_val)) %>%
-  # selecting top 10 starting integers from above code
-  top_n(10)
-
-# Create the scatterplot for highest value vs. starting integers
-ggplot(data = collatz_df, aes(x = start, y = max_val)) +
-  geom_point() + # Scatterplot for all integers
-  labs(
-    title = "Highest Sequence Value vs. Starting Integers",
-    x = "Starting Integers",
-    y = "Highest Sequence Value"
-  ) +
-  geom_point(
-    data = top10highvalue,
-    aes(x = start, y = max_val),
-    col = "purple4", # Color for the top 10 starting integers
-    size = 2, # Size of the points for the top 10
-    shape = 15 # Shape of the points for the top 10 (square)
-  ) +
-  geom_text_repel(
-    data = top10highvalue,
-    aes(x = start, y = max_val, label = start),
-    vjust = -0.5, # Adjust vertical position of labels
-    hjust = 0.5, # Adjust horizontal position of labels
-    size = 3, # Size of the labels
-    col = "orange2" # Color for labeling top 10 value points
-  ) +
-  scale_y_log10() # Add logarithmic scale to the y-axis
-```
-
-### Even x Odd Starting integers boxplot distribution
-
-```{r even_vs_odd boxplot}
-# Create a boxplot to compare the distributions
-ggplot(data = collatz_df, aes(x = parity, y = length, fill = parity)) +
-  geom_boxplot() +
-  labs(
-    title = "Sequence Lengths: Even vs Odd",
-    x = "Parity (Even/Odd)",
-    y = "Sequence Lengths"
-  )
-```
+### Even x Odd starting integers box plot
 
 These are the differences that I can notice based on my observations.
 
