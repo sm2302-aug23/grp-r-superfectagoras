@@ -37,7 +37,8 @@ ggplot(
     vjust = -0.5,
     hjust = 0.5,
     size = 3
-  )
+  ) +
+  theme_classic() 
 
 # Q2 Scatter plot of Highest Sequence Value vs. Starting Integers -------------
 
@@ -71,8 +72,9 @@ ggplot(data = collatz_df, aes(x = start, y = max_val)) +
     size = 3, # Size of the labels
     col = "orange2" # Color for labeling top 10 value points
   ) +
-  scale_y_log10() # Add logarithmic scale to the y-axis
-
+  scale_y_log10() + # Add logarithmic scale to the y-axis
+  theme_classic()
+  
 # Q3 Comparing Sequence Lengths: Even vs. Odd Starting Integers ----------------
 
 # Create a boxplot to compare the distributions
@@ -82,4 +84,5 @@ ggplot(data = collatz_df, aes(x = parity, y = length, fill = parity)) +
     title = "Sequence Lengths: Even vs Odd",
     x = "Parity (Even/Odd)",
     y = "Sequence Lengths"
-  )
+  ) +
+  theme_classic()
