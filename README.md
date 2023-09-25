@@ -80,15 +80,15 @@ Collatz Conjecture
 
 - Create a scatter plot showing the correlation between sequence lengths
   (y-axis) and starting integers (x-axis).
-- Additionally, we want to find the top 10 starting integers with the
+- Additionally, we want to find the top 10 starting integers with the
   longest sequences and highlight them.
 
 2.  How
 
-- Using the ggplot function to plot the top10integers and collatz_df
+- Using the ggplot function to plot the top10integers and collatz_df
   data sets from tasks 1 and 2, respectively. Adjusting the color, size,
   and shape of the points brings focus on the top 10 points.
-- Using the geom_text_repel() function to label the top 10 points.
+- Using the geom_text_repel() function to label the top 10 points.
 
 Here’s how the plot for this scatter plot looks like;
 ![<https://github.com/sm2302-aug23/grp-r-superfectagoras/blob/main/Start%20integers%20x%20Seq%20lengths.png>](Start%20integers%20x%20Seq%20lengths.png)
@@ -100,8 +100,8 @@ The whole code for this scatter plot can be found in
 
 1.  Objective
 
-- Similar to question 1, but with a relationship between the
-  starting integers (x-axis) and the highest sequence value (y-axis).
+- Similar to question 1, but with a relationship between the starting
+  integers (x-axis) and the highest sequence value (y-axis).
 
 2.  How
 
