@@ -174,20 +174,42 @@ observations.
 
 > What is the distribution of even and odd numbers in Collatz sequences?
 
-We will explore the Collatz Conjecture to understand the distributions
-of odd and even numbers within these sequences. Specifically, we want to
+Objectives
+- We will explore the Collatz Conjecture to understand the distributions
+of odd and even numbers within these sequences.
+- Specifically, we want to
 estimate if there are patterns or trends related to the occurrence of
 odd and even numbers across different starting integers and visualize
-these distributions using R. Additionally, we also want to explore
+these distributions using R.
+- Additionally, we also want to explore
 whether there is a relationship between even and odd numbers in terms of
 their ratio.
 
 ### Methodology
 
+**Counts of Even and Odd Numbers**
+
+1.Objective
+
+- This is to calculate the sum of even and odd numbers, respectively, from each sequence.
+- It's purpose is to see how the distribution between even and odd numbers looks like and how much of a difference there is between them
+
+2.How
+
 - Generate `collatz_sequence` using an existing data frame `collatz_df`
   from previous tasks by initialization.
-- Wrangle the data to identify `Even` and `Odd` numbers in each sequence
-  and calculate the ratio of even to odd numbers (`Even_Odd_Ratio`).
+- Wrangle the data to identify `Even` and `Odd` numbers in each sequence by mutating it.
+
+This part of the code can be found in [05-open.R](05-open.R) under mutate.
+
+**Even-Odd Ratio**
+
+1.Objective
+- This part is to 
+
+2.How
+
+- Calculate the ratio of even to odd numbers (`Even_Odd_Ratio`).
 - Summarize statistics for even and odd numbers (`EvenOdd_Avg_Max`) and
   the `Even_Odd_Ratio` (`Ratio_Avg_Max`) separately.
 - Calculate the average and maximum values for `Even` and `Odd` numbers.
@@ -210,8 +232,7 @@ discovered the following results:-
 2.  **Even-Odd Ratio**
     - The calculated `Even_Odd_Ratio` for each sequence varies
       individually but almost uniformly.
-    - Such analysis can provide information about the average and
-      maximum `Even_Odd_Ratio` observed in the Collatz sequences.
+    - 
     - If this result is visualized in a graph, one can see that it is
       mostly likely to showcase uniformity.
 3.  **Summary Statistics**
