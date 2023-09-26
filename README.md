@@ -97,15 +97,18 @@ Collatz Conjecture
 
 ### Part 1: top10longest
 
-1. **Objective**
+1.  **Objective**
 
 - Get a list of 10 starting integers that have the longest sequence.
 
-2. **How**
+2.  **How**
 
-- Using `arange(desc(length))` function to arrange the length data from collatz_df from Task 1 in descending order.
-- Using `head(10)` function to only take the first 10 data from the new arrangements of collatz_df.
-- Using `pull("start")` to only take the starting integers of the new data table.
+- Using arange(desc(length)) function to arrange the length data from
+  collatz_df from Task 1 in descending order.
+- Using head(10) function to only take the first 10 data from the new
+  arrangements of collatz_df.
+- Using pull(“start”) to only take the starting integers of the new data
+  table.
 
 #### Resulting top10longest
 
@@ -113,16 +116,19 @@ Collatz Conjecture
 
 ### Part 2: max_val_int
 
-1. **Objective**
+1.  **Objective**
 
 - Get the starting integer with the highest max value in the sequence.
 
-2. **How**
+2.  **How**
 
 - Similar concepts with Part 1.
-- Using `arrange(desc(max_val))` function to arrange the max_val data from collatz_df from Task 1 in descending order.
-- For the head function use `head(1)`, so only 1 starting integer is obtained.
-- Using `pull("start")` to only take the starting integers of the new data table.
+- Using arrange(desc(max_val)) function to arrange the max_val data from
+  collatz_df from Task 1 in descending order.
+- For the head function use head(1), so only 1 starting integer is
+  obtained.
+- Using pull(“start”) to only take the starting integers of the new data
+  table.
 
 #### Resulting max_val_int
 
@@ -130,16 +136,26 @@ Collatz Conjecture
 
 ### Part 3: even_odd_avg_len and even_odd_sd_len
 
-1. **Objectives**
-- Get the length of all even and odd starting integers separately.
-- Make a list that can compare the average length for even and odd starting integers.
-- Make a list that can compare the standard deviation of the length for even and odd starting integers.
+1.  **Objectives**
 
-2. **How**
-- Using `filter(parity == "EVEN")` function to only get the data from collatz_df from Task 1 that have the starting integer being an even number. Use `filter(parity == "ODD")` for odd numbers.
-- Using `pull("length")` function to only get the length data from the new even and odd data tables.
-- Using `c(mean(even_len), mean(odd_len))` function to combine the mean value of even lengths with the mean value of odd lengths.
-- Using `c(sd(even_len), sd(odd_len))` function to combine the standard deviation value of even lengths with the standard deviation value of odd lengths.
+- Get the length of all even and odd starting integers separately.
+- Make a list that can compare the average length for even and odd
+  starting integers.
+- Make a list that can compare the standard deviation of the length for
+  even and odd starting integers.
+
+2.  **How**
+
+- Using filter(parity == “EVEN”) function to only get the data from
+  collatz_df from Task 1 that have the starting integer being an even
+  number. Use filter(parity == “ODD”) for odd numbers.
+- Using pull(“length”) function to only get the length data from the new
+  even and odd data tables.
+- Using c(mean(even_len), mean(odd_len)) function to combine the mean
+  value of even lengths with the mean value of odd lengths.
+- Using c(sd(even_len), sd(odd_len)) function to combine the standard
+  deviation value of even lengths with the standard deviation value of
+  odd lengths.
 
 #### Resulting even_odd_avg_len and even_odd_sd_len
 
@@ -506,7 +522,31 @@ and their patterns.
 
 ## Task 6: Creative Visualisation Challenge
 
-![](README_files/figure-gfm/Task_6-1.png)<!-- -->![](README_files/figure-gfm/Task_6-2.png)<!-- -->
+### Question
+
+Plotting the ratio of even and odd numbers in the sequences.
+
+#### Method 1
+
+- By using `ggplot2` with `geom_histogram`.
+- First making `parity_table` with
+  `c(collatz_sequence$even, collatz_sequence$odd)` which can be use to
+  count the number of even and odd numbers in each sequence.
+- Using
+  `parity_table[rep(seq_len(nrow(parity_table)), times = count), ]` to
+  put into `parity_df` which can be used as `fill` for the histogram.
+- For x-axis of the histogram it would be the starting integers.
+
+![](README_files/figure-gfm/Task_6_1-1.png)<!-- -->
+
+#### Method 2
+
+- By using `ggplot2` with `geom_point`.
+- Using `even_odd_ratio` as the y-axis.
+- The top ten highest ratio are labelled and colored in blue.
+- The red dots represents the ratio that are `odd>=even`.
+
+![](README_files/figure-gfm/Task_6_2-1.png)<!-- -->
 
 ## Task 7 : Other Data
 
@@ -517,6 +557,20 @@ and their patterns.
 ![](README_files/figure-gfm/collatz_sequence_plot_code-1.png)<!-- -->
 
 ### Sequence Length Heatmap
+
+#### Question
+
+Comparing pairs of starting integers with absolute length difference
+using heatmap.
+
+##### Method
+
+- Make pairs of all possible starting integers using
+  `expand(start1 = start[1:1000], start2 = start[1:1000])`
+- Calculate the absolute difference between the length of the pair using
+  `abs(collatz_df$length[start1] - collatz_df$length[start2]))`
+- There are straight diagonal lines seen in blue color that shows the
+  pairs that have the same sequence length.
 
 ![](README_files/figure-gfm/heatmap-1.png)<!-- -->
 

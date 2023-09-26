@@ -826,6 +826,7 @@ parity_df %>%
   
   theme_classic()
 ```
+
 #### Method 2
 - By using `ggplot2` with `geom_point`.
 - Using `even_odd_ratio` as the y-axis.
