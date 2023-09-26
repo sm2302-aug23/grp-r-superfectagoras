@@ -521,10 +521,10 @@ We will explore the Collatz Conjecture to understand the distributions of odd an
 ### Methodology
 
 -   Generate `collatz_sequence` using an existing data frame `collatz_df` from previous tasks by initialization.
--   Wrangle the data to identify `Even` and `Odd` numbers in each sequence and calculate the ratio of even to odd numbers (`Even_Odd_Ratio`).
--   Summarize statistics for even and odd numbers (`EvenOdd_Avg_Max`) and the `Even_Odd_Ratio` (`Ratio_Avg_Max`) separately.
+-   Wrangle the data to identify `Even` and `Odd` numbers in each sequence and calculate the ratio of even to odd numbers (`even_odd_ratio`).
+-   Summarize statistics for even and odd numbers (`even_odd_avg_max`) and the `even_odd_ratio` (`ratio_avg_max`) separately.
 -   Calculate the average and maximum values for `Even` and `Odd` numbers.
--   Calculate the average and maximum values for the `Even_Odd_Ratio`.
+-   Calculate the average and maximum values for the `even_odd_ratio`.
 
 ```{r Task_5, include=FALSE}
 
@@ -536,30 +536,30 @@ collatz_sequence <- collatz_df
 # Wrangle the data to identify odd and even numbers in each sequence and Calculate the ratio
 collatz_sequence <- collatz_sequence %>%
   mutate(
-    Even = sapply(seq, function(x) {
+    even = sapply(seq, function(x) {
       sum(x %% 2 == 0)
     }),
-    Odd = sapply(seq, function(x) {
+    odd = sapply(seq, function(x) {
       sum(x %% 2 == 1)
     }),
-    Even_Odd_Ratio = Even / Odd
+    even_odd_ratio = even / odd
   )
 
-# Summarize statistics for Even, Odd and Even_Odd_Ratio
-EvenOdd_Avg_Max <- collatz_sequence %>%
-  gather(key = "type", value = "value", Even, Odd) %>%
+# Summarize statistics for Even, Odd and even_odd_ratio
+even_odd_avg_max <- collatz_sequence %>%
+  gather(key = "type", value = "value", even, odd) %>%
   group_by(type) %>%
   summarize(
-    Average = mean(value),
-    Maximum = max(value)
+    average = mean(value),
+    maximum = max(value)
   )
 
-Ratio_Avg_Max <- collatz_sequence %>%
-  gather(key = "type", value = "value", Even_Odd_Ratio) %>%
+ratio_avg_max <- collatz_sequence %>%
+  gather(key = "type", value = "value", even_odd_ratio) %>%
   group_by(type) %>%
   summarize(
-    Average = mean(value),
-    Maximum = max(value)
+    average = mean(value),
+    maximum = max(value)
   )
 ```
 
@@ -572,11 +572,11 @@ By analyzing the Collatz sequences based from our Rcode above, we discovered the
     -   The distribution shows that there are more even numbers compared to odd numbers (refer to [7.5.1 Counts of Odd & Even Numbers in Collatz Sequences](https://github.com/sm2302-aug23/grp-r-superfectagoras#751-counts-of-odd--even-numbers-in-collatz-sequences)).
     -   The sum of both even and odd numbers individually from the respective sequences is computed.
 2.  **Even-Odd Ratio**
-    -   The calculated `Even_Odd_Ratio` for each sequence varies individually but almost uniformly.
-    -   Such analysis can provide information about the average and maximum `Even_Odd_Ratio` observed in the Collatz sequences.
+    -   The calculated `even_odd_ratio` for each sequence varies individually but almost uniformly.
+    -   Such analysis can provide information about the average and maximum `even_odd_ratio` observed in the Collatz sequences.
     -   If this result is visualized in a graph, one can see that it is mostly likely to showcase uniformity.
 3.  **Summary Statistics**
-    -   The summary statistics show the average and maximum counts for even and odd numbers (`EvenOdd_Avg_Max`), and even-odd ratios (`Ratio_Avg_Max`) in the sequences.
+    -   The summary statistics show the average and maximum counts for even and odd numbers (`even_odd_avg_max`), and even-odd ratios (`ratio_avg_max`) in the sequences.
     -   This information helps in understanding the central tendency and variability of even and odd numbers, even if there is a slight variance.
 
 #### Below are the results obtained after the Rcode computational run
@@ -589,14 +589,14 @@ print(collatz_sequence)
 
 ##### Part 2: Summary Statistics for Even and Odd Numbers Table
 
-```{r EvenOdd_Avg_Max, echo=FALSE}
-print(EvenOdd_Avg_Max)
+```{r even_odd_avg_max, echo=FALSE}
+print(even_odd_avg_max)
 ```
 
 ##### Part 3: Summary Statistics for Ratio Table
 
-```{r Ratio_Avg_Max, echo=FALSE}
-print(Ratio_Avg_Max)
+```{r ratio_avg_max, echo=FALSE}
+print(ratio_avg_max)
 ```
 
 ### Implications
@@ -611,6 +611,77 @@ The analysis of Collatz Conjecture sequences reveals that these sequences exhibi
 
 ## Task 6: Creative Visualisation Challenge
 
+```{r Task_6, echo=FALSE}
+parity_table <- 
+  tibble(
+    "ints" = rep(1:10000, times = 2),
+    "even_odds_count" = c(collatz_sequence$even, collatz_sequence$odd)
+  ) %>%
+  arrange(ints) %>%
+  mutate(
+    "parity" = rep(c("Even", "Odd"), times = 10000)
+  )
+
+count <- parity_table$even_odds_count
+parity_df <- parity_table[rep(seq_len(nrow(parity_table)), times = count), ]
+
+parity_df %>%
+  ggplot(
+    aes(
+      x = ints,
+      fill = parity
+    )
+  ) +
+  
+  geom_histogram(
+    binwidth = 1,
+    position = "fill") +
+  
+  theme_classic()
+
+## Another way of plotting ratio
+
+odd_wins <-
+  collatz_sequence %>%
+  filter(even_odd_ratio <= 1)
+
+top10ratio <-
+  collatz_sequence %>%
+  arrange(desc(even_odd_ratio)) %>%
+  slice(1:10)
+
+collatz_sequence %>%
+  ggplot(
+    aes(
+      x = start,
+      y = even_odd_ratio
+    )
+  ) +
+  
+  geom_point(
+  ) +
+  
+  geom_point(
+    data = odd_wins,
+    color = "red"
+  ) +
+  
+  geom_point(
+    data = top10ratio,
+    color = "blue",
+    size = 1.5
+  ) +
+  
+  geom_text_repel(
+    data = top10ratio,
+    aes(label = start,
+        vjust = -0.5)
+  ) +
+  
+  theme_classic()
+
+```
+
 ## Task 7 : Other Data
 
 ### Task 5
@@ -621,7 +692,7 @@ The analysis of Collatz Conjecture sequences reveals that these sequences exhibi
 ## Explore and visualize the distribution of even and odd numbers
 ## For example, create a bar chart:
 collatz_sequence %>%
-  gather(key = "type", value = "count", Odd, Even) %>%
+  gather(key = "type", value = "count", odd, even) %>%
   ggplot(aes(x = type, y = count, fill = type)) +
   geom_bar(stat = "identity") +
   labs(
@@ -630,6 +701,33 @@ collatz_sequence %>%
     y = "Count"
   ) +
   theme_classic()
+```
+
+#### Sequence Length Heatmap
+
+```{r heatmap, echo=FALSE}
+### Making pairs of random starting integers
+pairs_df <- collatz_df %>%
+  expand(start1 = start[1:1000], start2 = start[1:1000])
+
+### Calculating the absolute difference between the length of the pairs
+pairs_df <- pairs_df %>%
+  mutate(abs_length_diff = abs(collatz_df$length[start1] - 
+                                 collatz_df$length[start2]))
+
+### Making the heatmap of the absolute length difference 
+heatmap_plot <- ggplot(pairs_df, aes(x = start1,
+                                     y = start2,
+                                     fill = abs_length_diff)) +
+  geom_tile() +
+  scale_fill_gradient(low = "blue",
+                      high = "red") +
+  labs(title = "Collatz Conjecture Heatmap - Absolute Length Difference",
+       x = "1st Starting Integer",
+       y = "2nd Starting Integer") +
+  theme_minimal()
+
+print(heatmap_plot)
 ```
 
 ## Contributors
