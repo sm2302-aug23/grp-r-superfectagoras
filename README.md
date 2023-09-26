@@ -3,6 +3,81 @@ Collatz Conjecture
 
 ## Task 1: Generating The Collatz Conjecture
 
+1.  **Objective**
+
+- **gen_collatz**
+
+  - Create a function gen_collatz which generates collatz dataframe for
+    integers from 1 to 10000
+
+  - Throw errors when input is:
+
+    - not an integer
+
+    - less than one
+
+- **collatz_df**
+
+  - Using gen_collatz for inputs ranging from 1:10000, create a tibble
+    called collatz_df
+
+  - The columns of collatz_df are:
+
+    - **start:** The starting integer of the sequence
+
+    - **seq:** The Collatz sequence saved as a list
+
+    - **length:** The length of the sequences
+
+    - **parity:** The parity of the starting sequences
+
+    - **max_val:** The highest value inside the sequences
+
+2.  **How**
+
+- **gen_collatz**
+
+  - Throws error if any of these are false (input n):
+
+    - `is.numeric(n)`
+
+    - `n == as.integer(n)`
+
+    - `n < 1`
+
+  - Saving the input inside a variable `current`
+
+  - While `current < 1`
+
+    - if current is odd, apply 3n+1 formula
+
+    - if current is even, apply n/2 formula
+
+    - these numbers are saved in a vector `seq`
+
+  - returns the vector `seq`
+
+- **collatz_df**
+
+  - initialize the tibble with values for starting integer 1
+
+    - **start:** the starting integer (in this case, 1)
+
+    - **seq:** value obtained from putting the starting integer as
+      argument for `gen_collatz`
+
+    - **length:** length of seq
+
+    - **parity:** simply check if starting integer is even or odd
+
+    - **max_val:** finds the highest value in seq using `max()`, but not
+      before changing seq from a list to a vector using `unlist()`
+
+  - Create a for loop and use `add_row()` to add rows for integers 2 to
+    10000
+
+<!-- -->
+
     ## # A tibble: 10,000 × 5
     ##    start seq        length parity max_val
     ##    <dbl> <list>      <int> <chr>    <dbl>
@@ -48,6 +123,30 @@ Collatz Conjecture
 
 ### Part 1: backtracks_df
 
+1.  **Objective:**
+
+- Filter the data so that only rows where there is backtracking present
+  in the sequences are kept. Save this new tibble as `backtracks_df`
+
+2.  **How:**
+
+- Create a new `backtrack` function to check if there are backtracks in
+  sequences
+
+  - If there is a point where the next number is less than the starting
+    integer, set `below_init <- TRUE`
+
+  - If there is a point after `below_init <- TRUE` where the next number
+    is higher than the starting integer, set `above_init <- TRUE`
+
+  - If both `below_init` and `above_init` is `TRUE`, then return `TRUE`
+
+- Filtering the data
+
+  - Simply use `filter()` on `collatz_df`, where it filters only rows
+    that returns `TRUE` for the `backtrack` function. This will be saved
+    inside `backtracks_df`
+
 #### Resulting backtracks_df
 
     ## # A tibble: 8,229 × 5
@@ -67,13 +166,70 @@ Collatz Conjecture
 
 ### Part 2: mode_backtrack
 
+1.  **Objective:**
+
+- Find out what is the most frequently occuring number of times
+  backtracking occurs in a sequence . Save this value as
+  `mode_backtrack`
+
+2.  **How:**
+
+- Create a new `backtrack_count` function to count number of backtracks
+  in a sequence
+
+  - Works similarly to `backtrack` except it immediately resets
+    `below_init` and `above_init` as `FALSE` whenever both of them are
+    `TRUE`
+
+  - The function counts how many times it has done this, and returns
+    that count
+
+- Create a new function called `mode_calculator`, which checks the mode
+  inside a list/vector/column.
+
+- Filtering the data
+
+  - Using `backtracks_df`, mutate the data so it has a new column for
+    `freq`, whose value is obtained from using `backtrack_count`
+
+  - Get the mode using `summarise()` and using `mode_calculator`
+
+  - Do `pull(1)` to get the value as a vector/double
+
 #### Resulting mode_backtrack
 
     ## [1] 1
 
+This means that the mode of the number of backtracks is `1`.
+
 ### Part 3: max_after_backtrack
 
+1.  **Objective:**
+
+- Find out what is the maximum value reached after the first backtrack
+  of these sequences. Save this vector as `max_after_backtrack`
+
+2.  **How:**
+
+- Create a new `max_backtrack` function to get the number after the
+  first backtrack
+
+  - Works similarly to `backtrack` except it also saves the current
+    number that triggered `above_init` to be TRUE. Return this number.
+
+- Filtering the data
+
+  - Using `backtracks_df`, mutate the data so it has a new column
+    `max_backtrack`, whose value is obtained from using
+    `max_backtrack function`
+
+  - Use `pull()` to get the new column as a vector. Save it in
+    `max_after_backtrack`
+
 #### Resulting max_after_backtrack
+
+Converted to the tibble for the sake of the README. The original code
+should output a very long vector instead.
 
     ## # A tibble: 8,229 × 1
     ##    max_after_backtrack
@@ -92,7 +248,24 @@ Collatz Conjecture
 
 ### Part 4: even_odd_backtrack
 
+1.  **Objective:**
+
+- Find the frequency count for even and odd bactracking integers. Save
+  this vector as even_odd_backtrack.
+
+2.  **How:**
+
+- Filtering the data
+
+  - Using `backtracks_df`, use `count()` to find the frequency for each
+    unique values in `parity`, which are `EVEN` and `ODD`
+
+  - Use `pull()` to get the result column as a vector. Save it in
+    `even_odd_backtrack`
+
 #### Resulting even_odd_backtrack
+
+First value being the even count, second being the odd count.
 
     ## [1] 3943 4286
 
@@ -115,6 +288,7 @@ Collatz Conjecture
 - Using the geom_text_repel() function to label the top 10 points.
 
 Here’s how the plot for this scatter plot looks like:
+
 ![](README_files/figure-gfm/Task_4_1-1.png)<!-- -->
 
 The whole code for this scatter plot can be found in
@@ -139,6 +313,7 @@ The whole code for this scatter plot can be found in
   squished at the bottom originally.
 
 Here’s how the plot for this scatter plot looks like:
+
 ![](README_files/figure-gfm/Task_4_2-1.png)<!-- -->
 
 The whole code for this scatter plot can be found in
@@ -160,6 +335,7 @@ The whole code for this scatter plot can be found in
   lengths, and the x-axis the parity (even and odd).
 
 Here’s how the plot for this scatter plot looks like:
+
 ![](README_files/figure-gfm/Task_4_3-1.png)<!-- -->
 
 The whole code for this scatter plot can be found in
@@ -302,13 +478,13 @@ and their patterns.
 
 ## Task 7 : Other Data
 
-### Task 5
+### Task 5 append
 
-#### 7.5.1 Counts of Odd & Even Numbers in Collatz Sequences
+#### 7.5.1 Plot for Counts of Odd & Even Numbers in Collatz Sequences
 
 ![](README_files/figure-gfm/collatz_sequence_plot_code-1.png)<!-- -->
 
-#### Sequence Length Heatmap
+### Sequence Length Heatmap
 
 ![](README_files/figure-gfm/heatmap-1.png)<!-- -->
 
