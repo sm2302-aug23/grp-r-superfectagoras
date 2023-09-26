@@ -97,17 +97,49 @@ Collatz Conjecture
 
 ### Part 1: top10longest
 
+1. **Objective**
+
+- Get a list of 10 starting integers that have the longest sequence.
+
+2. **How**
+
+- Using arange(desc(length)) function to arrange the length data from collatz_df from Task 1 in descending order.
+- Using head(10) function to only take the first 10 data from the new arrangements of collatz_df.
+- Using pull("start") to only take the starting integers of the new data table.
+
 #### Resulting top10longest
 
     ##  [1] 6171 9257 6943 7963 8959 6591 9887 9897 7422 7423
 
 ### Part 2: max_val_int
 
+1. **Objective**
+
+- Get the starting integer with the highest max value in the sequence.
+
+2. **How**
+
+- Similar concepts with Part 1.
+- Using arrange(desc(max_val)) function to arrange the max_val data from collatz_df from Task 1 in descending order.
+- For the head function use head(1), so only 1 starting integer is obtained.
+- Using pull("start") to only take the starting integers of the new data table.
+
 #### Resulting max_val_int
 
     ## [1] 9663
 
 ### Part 3: even_odd_avg_len and even_odd_sd_len
+
+1. **Objectives**
+- Get the length of all even and odd starting integers separately.
+- Make a list that can compare the average length for even and odd starting integers.
+- Make a list that can compare the standard deviation of the length for even and odd starting integers.
+
+2. **How**
+- Using filter(parity == "EVEN") function to only get the data from collatz_df from Task 1 that have the starting integer being an even number. Use filter(parity == "ODD") for odd numbers.
+- Using pull("length") function to only get the length data from the new even and odd data tables.
+- Using c(mean(even_len), mean(odd_len)) function to combine the mean value of even lengths with the mean value of odd lengths.
+- Using c(sd(even_len), sd(odd_len)) function to combine the standard deviation value of even lengths with the standard deviation value of odd lengths.
 
 #### Resulting even_odd_avg_len and even_odd_sd_len
 
