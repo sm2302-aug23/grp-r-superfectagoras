@@ -796,7 +796,7 @@ Plotting the ratio of even and odd numbers in the sequences.
 - By using `ggplot2` with `geom_histogram`.
 - First making `parity_table` with `c(collatz_sequence$even, collatz_sequence$odd)` which can be use to count the number of even and odd numbers in each sequence.
 - Using `parity_table[rep(seq_len(nrow(parity_table)), times = count), ]` to put into `parity_df` which can be used as `fill` for the histogram.
-- For x value of the histogram it would be the starting integers.
+- For x-axis of the histogram it would be the starting integers.
 
 ```{r Task_6_1, echo=FALSE}
 parity_table <- 
@@ -828,6 +828,9 @@ parity_df %>%
 ```
 #### Method 2
 - By using `ggplot2` with `geom_point`.
+- Using `even_odd_ratio` as the y-axis.
+- The top ten highest ratio are labelled and colored in blue.
+- The red dots represents the ratio that are `odd>=even`.
 
 ```{r Task_6_2, echo=FALSE}
 ## Another way of plotting ratio
@@ -895,6 +898,14 @@ collatz_sequence %>%
 ```
 
 ### Sequence Length Heatmap
+
+#### Question
+Comparing pairs of starting integers with absolute length difference using heatmap.
+
+##### Method
+- Make pairs of all possible starting integers using `expand(start1 = start[1:1000], start2 = start[1:1000])`
+- Calculate the absolute difference between the length of the pair using `abs(collatz_df$length[start1] - collatz_df$length[start2]))` 
+- There are straight diagonal lines seen in blue color that shows the pairs that have the same sequence length.
 
 ```{r heatmap, echo=FALSE}
 ### Making pairs of random starting integers
