@@ -789,7 +789,16 @@ The analysis of Collatz Conjecture sequences reveals that these sequences exhibi
 
 ## Task 6: Creative Visualisation Challenge
 
-```{r Task_6, echo=FALSE}
+### Question
+Plotting the ratio of even and odd numbers in the sequences.
+
+#### Method 1
+- By using `ggplot2` with `geom_histogram`.
+- First making `parity_table` with `c(collatz_sequence$even, collatz_sequence$odd)` which can be use to count the number of even and odd numbers in each sequence.
+- Using `parity_table[rep(seq_len(nrow(parity_table)), times = count), ]` to put into `parity_df` which can be used as `fill` for the histogram.
+- For x value of the histogram it would be the starting integers.
+
+```{r Task_6_1, echo=FALSE}
 parity_table <- 
   tibble(
     "ints" = rep(1:10000, times = 2),
@@ -816,7 +825,11 @@ parity_df %>%
     position = "fill") +
   
   theme_classic()
+```
+#### Method 2
+- By using `ggplot2` with `geom_point`.
 
+```{r Task_6_2, echo=FALSE}
 ## Another way of plotting ratio
 
 odd_wins <-
