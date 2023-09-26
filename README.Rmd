@@ -1,0 +1,952 @@
+---
+title: "Collatz Conjecture"
+output: github_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## Task 1: Generating The Collatz Conjecture
+
+```{r packages, include=FALSE}
+library(tidyverse)
+library(ggplot2)
+library(ggrepel)
+library(dplyr)
+```
+
+1.  **Objective**
+
+-   **gen_collatz**
+
+    -   Create a function gen_collatz which generates collatz dataframe for integers from 1 to 10000
+
+    -   Throw errors when input is:
+
+        -   not an integer
+
+        -   less than one
+
+-   **collatz_df**
+
+    -   Using gen_collatz for inputs ranging from 1:10000, create a tibble called collatz_df
+
+    -   The columns of collatz_df are:
+
+        -   **start:** The starting integer of the sequence
+
+        -   **seq:** The Collatz sequence saved as a list
+
+        -   **length:** The length of the sequences
+
+        -   **parity:** The parity of the starting sequences
+
+        -   **max_val:** The highest value inside the sequences
+
+2.  **How**
+
+-   **gen_collatz**
+
+    -   Throws error if any of these are false (input n):
+
+        -   `is.numeric(n)`
+
+        -   `n == as.integer(n)`
+
+        -   `n < 1`
+
+    -   Saving the input inside a variable `current`
+
+    -   While `current < 1`
+
+        -   if current is odd, apply 3n+1 formula
+
+        -   if current is even, apply n/2 formula
+
+        -   these numbers are saved in a vector `seq`
+
+    -   returns the vector `seq`
+
+-   **collatz_df**
+
+    -   initialize the tibble with values for starting integer 1
+
+        -   **start:** the starting integer (in this case, 1)
+
+        -   **seq:** value obtained from putting the starting integer as argument for `gen_collatz`
+
+        -   **length:** length of seq
+
+        -   **parity:** simply check if starting integer is even or odd
+
+        -   **max_val:** finds the highest value in seq using `max()`, but not before changing seq from a list to a vector using `unlist()`
+
+    -   Create a for loop and use `add_row()` to add rows for integers 2 to 10000
+
+```{r gen_collatz, include=FALSE}
+# accepts a single integer
+gen_collatz <- function(n) {
+  # Input should all be numerical
+  if (is.numeric(n) == FALSE) {
+    stop("Invalid input: Not a numerical value")
+  }
+
+  # Input should all be integers
+  if ((n == as.integer(n)) == FALSE) {
+    stop("Invalid input: Not an integer")
+  }
+
+  # Input should be 1 or more
+  if (n < 1) {
+    stop("Invalid input: Value is less than 1")
+  }
+
+  # Initialize values
+  current <- n
+  seq <- c(n)
+
+  # The actual function
+  while (current > 1) {
+    # check if odd or even
+    if (current %% 2 == 0) {
+      current <- current / 2
+    } else {
+      current <- (current * 3) + 1
+    }
+
+    # save the new number into the sequence
+    seq <- c(seq, current)
+  }
+
+  # return the sequence
+  return(seq)
+}
+```
+
+```{r collatz_df, include=FALSE}
+collatz_df <- tibble(
+  "start" = 1,
+  "seq" = list(gen_collatz(1)),
+  "length" = length(unlist(seq)),
+  "parity" = ifelse((start %% 2) == 0, "EVEN", "ODD"),
+  "max_val" = max(unlist(seq))
+)
+
+n <- 2
+
+while (n <= 10000) {
+  collatz_df <-
+    collatz_df %>%
+    add_row(
+      "start" = n,
+      "seq" = list(gen_collatz(n)),
+      "length" = length(unlist(seq)),
+      "parity" = ifelse((start %% 2) == 0, "EVEN", "ODD"),
+      "max_val" = max(unlist(seq))
+    )
+
+  n <- n + 1
+}
+```
+
+```{r collatz_df_result, echo=FALSE}
+print(collatz_df)
+```
+
+## Task 2: Exploratory Data Analysis
+
+### Part 1: top10longest
+
+1. **Objective**
+
+- Get a list of 10 starting integers that have the longest sequence.
+
+2. **How**
+
+- Using arange(desc(length)) function to arrange the length data from collatz_df from Task 1 in descending order.
+- Using head(10) function to only take the first 10 data from the new arrangements of collatz_df.
+- Using pull("start") to only take the starting integers of the new data table.
+
+```{r top10longest, include=FALSE}
+## 1. Find the top 10 integers that produce the longest sequence.
+
+top10longest <- collatz_df %>%
+  arrange(desc(length)) %>%
+  head(10) %>%
+  pull("start")
+```
+
+#### Resulting top10longest
+
+```{r top10longest_result, echo=FALSE}
+print(top10longest)
+```
+
+### Part 2: max_val_int
+
+1. **Objective**
+
+- Get the starting integer with the highest max value in the sequence.
+
+2. **How**
+
+- Similar concepts with Part 1.
+- Using arrange(desc(max_val)) function to arrange the max_val data from collatz_df from Task 1 in descending order.
+- For the head function use head(1), so only 1 starting integer is obtained.
+- Using pull("start") to only take the starting integers of the new data table.
+
+```{r max_val_int, include=FALSE}
+max_val_int <- collatz_df %>%
+  arrange(desc(max_val)) %>%
+  head(1) %>%
+  pull("start")
+```
+
+#### Resulting max_val_int
+
+```{r max_val_int_result, echo=FALSE}
+print(max_val_int)
+```
+
+### Part 3: even_odd_avg_len and even_odd_sd_len
+
+1. **Objectives**
+- Get the length of all even and odd starting integers separately.
+- Make a list that can compare the average length for even and odd starting integers.
+- Make a list that can compare the standard deviation of the length for even and odd starting integers.
+
+2. **How**
+- Using filter(parity == "EVEN") function to only get the data from collatz_df from Task 1 that have the starting integer being an even number. Use filter(parity == "ODD") for odd numbers.
+- Using pull("length") function to only get the length data from the new even and odd data tables.
+- Using c(mean(even_len), mean(odd_len)) function to combine the mean value of even lengths with the mean value of odd lengths.
+- Using c(sd(even_len), sd(odd_len)) function to combine the standard deviation value of even lengths with the standard deviation value of odd lengths.
+
+```{r even_odd_avg_sd_len, include=FALSE}
+# Getting all the length of all even starting integers.
+even_len <- collatz_df %>%
+  filter(parity == "EVEN") %>%
+  pull("length")
+
+# Getting all the length of all odd starting integers.
+odd_len <- collatz_df %>%
+  filter(parity == "ODD") %>%
+  pull("length")
+
+# Comparing the average of even starting integers length with odd ones.
+even_odd_avg_len <- c(mean(even_len), mean(odd_len))
+
+# Comparing the standard deviation of
+# even starting integers length with odd ones.
+even_odd_sd_len <- c(sd(even_len), sd(odd_len))
+```
+
+#### Resulting even_odd_avg_len and even_odd_sd_len
+
+##### even_odd_avg_len
+
+```{r even_odd_avg_len_result, echo=FALSE}
+print(even_odd_avg_len)
+```
+
+##### even_odd_sd_len
+
+```{r even_odd_sd_len_result, echo=FALSE}
+print(even_odd_sd_len)
+```
+
+## Task 3: Investigating "Backtracking" In Sequences
+
+### Part 1: backtracks_df
+
+1.  **Objective:**
+
+-   Filter the data so that only rows where there is backtracking present in the sequences are kept. Save this new tibble as `backtracks_df`
+
+2.  **How:**
+
+-   Create a new `backtrack` function to check if there are backtracks in sequences
+
+    -   If there is a point where the next number is less than the starting integer, set `below_init <- TRUE`
+
+    -   If there is a point after `below_init <- TRUE` where the next number is higher than the starting integer, set `above_init <- TRUE`
+
+    -   If both `below_init` and `above_init` is `TRUE`, then return `TRUE`
+
+-   Filtering the data
+
+    -   Simply use `filter()` on `collatz_df`, where it filters only rows that returns `TRUE` for the `backtrack` function. This will be saved inside `backtracks_df`
+
+```{r backtrack, include=FALSE}
+## function backtrack to check for backtracking
+backtrack <- function(x) {
+  # initialize
+  initial <- x[1]
+  current <- 2
+  below_init <- FALSE
+  above_init <- FALSE
+
+  while (current <= length(x)) {
+    # check for when current value is less than initial
+    if (x[current] < initial) {
+      below_init <- TRUE
+    }
+
+    # check for when current value is higher than initial
+    # but only after below_init is TRUE
+    if ((x[current] > initial) &&
+      (below_init == TRUE)) {
+      above_init <- TRUE
+    }
+
+    # increment current by 1
+    current <- current + 1
+  }
+
+  # Both must be TRUE to be considered backtracking
+  ifelse(below_init & above_init, TRUE, FALSE)
+}
+```
+
+```{r backtracks_df, include=FALSE}
+## doing the actual filtering with the function
+backtracks_df <-
+  collatz_df %>%
+  filter(
+    sapply(seq, backtrack)
+  )
+```
+
+#### Resulting backtracks_df
+
+```{r backtracks_df_result, echo=FALSE}
+print(backtracks_df)
+```
+
+### Part 2: mode_backtrack
+
+1.  **Objective:**
+
+-   Find out what is the most frequently occuring number of times backtracking occurs in a sequence . Save this value as `mode_backtrack`
+
+2.  **How:**
+
+-   Create a new `backtrack_count` function to count number of backtracks in a sequence
+
+    -   Works similarly to `backtrack` except it immediately resets `below_init` and `above_init` as `FALSE` whenever both of them are `TRUE`
+
+    -   The function counts how many times it has done this, and returns that count
+
+-   Create a new function called `mode_calculator`, which checks the mode inside a list/vector/column.
+
+-   Filtering the data
+
+    -   Using `backtracks_df`, mutate the data so it has a new column for `freq`, whose value is obtained from using `backtrack_count`
+
+    -   Get the mode using `summarise()` and using `mode_calculator`
+
+    -   Do `pull(1)` to get the value as a vector/double
+
+```{r backtrack_count, include=FALSE}
+## backtrack count
+backtrack_count <- function(x) {
+  # initialize
+  initial <- x[1]
+  current <- 2
+  below_init <- FALSE
+  above_init <- FALSE
+  counter <- 0
+
+  while (current <= length(x)) {
+    # check for when current value is less than initial
+    if (x[current] < initial &&
+      (below_init == FALSE)) {
+      below_init <- TRUE
+    }
+
+    # check for when current value is higher than initial
+    # but only after below_init is TRUE
+    if ((x[current] > initial) &&
+      (below_init == TRUE) &&
+      (above_init == FALSE)) {
+      above_init <- TRUE
+    }
+
+    # if below_init and above_init is true, add 1 to counter
+    # immediately change back the variables to their FALSE state
+    if (below_init && above_init) {
+      counter <- counter + 1
+      below_init <- FALSE
+      above_init <- FALSE
+    }
+
+    # increment current by 1
+    current <- current + 1
+  }
+
+  # returns the backtrack count for each sequences
+  return(counter)
+}
+```
+
+```{r mode_calculator, include=FALSE}
+mode_calculator <- function(x) {
+  # initialize
+  unique_nums <- c()
+  num_freq <- c()
+
+  # tally the numbers in the freq table
+  for (i in x) {
+    # If the number in freq is not in unique_nums yet, add to unique_nums
+    # also add one to num_freq index that represents the new number (last ind)
+    # else, look for index where the number appears on unique_nums
+    # and then add 1 to the same index in num_freq
+    if ((i %in% unique_nums) == FALSE) {
+      unique_nums <- c(unique_nums, i)
+      num_freq <- c(num_freq, 1)
+    } else {
+      index <- which(unique_nums == i)
+      num_freq[index] <- num_freq[index] + 1
+    }
+  }
+
+  # Find the index of the highest frequency
+  # then find the number represented by that frequency
+  index <- which(num_freq == max(num_freq))
+  mode_freq <- unique_nums[index]
+
+
+  # return the mode
+  return(mode_freq)
+}
+```
+
+```{r mode_backtrack, include=FALSE}
+## doing the actual filtering with backtrack_count
+mode_backtrack <-
+  backtracks_df %>%
+  mutate(
+    "freq" = sapply(seq, backtrack_count)
+  ) %>%
+  summarize(
+    "mode" = mode_calculator(freq)
+  ) %>%
+  pull(1)
+```
+
+#### Resulting mode_backtrack
+
+```{r mode_backtrack_result, echo=FALSE}
+print(mode_backtrack)
+```
+
+This means that the mode of the number of backtracks is `1`.
+
+### Part 3: max_after_backtrack
+
+1.  **Objective:**
+
+-   Find out what is the maximum value reached after the first backtrack of these sequences. Save this vector as `max_after_backtrack`
+
+2.  **How:**
+
+-   Create a new `max_backtrack` function to get the number after the first backtrack
+
+    -   Works similarly to `backtrack` except it also saves the current number that triggered `above_init` to be TRUE. Return this number.
+
+-   Filtering the data
+
+    -   Using `backtracks_df`, mutate the data so it has a new column `max_backtrack`, whose value is obtained from using `max_backtrack function`
+
+    -   Use `pull()` to get the new column as a vector. Save it in `max_after_backtrack`
+
+```{r max_backtrack, include=FALSE}
+## function to find the max after first backtrack
+max_backtrack <- function(x) {
+  # initialize
+  initial <- x[1]
+  current <- 2
+  below_init <- FALSE
+  above_init <- FALSE
+  max_val <- 0
+
+  while (current <= length(x)) {
+    # check for when current value is less than initial
+    if (x[current] < initial) {
+      below_init <- TRUE
+    }
+
+    # check for when current value is higher than initial
+    # but only after below_init is TRUE
+    if ((x[current] > initial) &&
+      (below_init == TRUE)) {
+      above_init <- TRUE
+    }
+
+    # if below_init and above_init is true, start checking for max_val
+    if (below_init && above_init) {
+      if (x[current] > max_val) {
+        max_val <- x[current]
+      }
+    }
+
+    # increment current by 1
+    current <- current + 1
+  }
+
+  # return the max_val
+  return(max_val)
+}
+```
+
+```{r max_after_backtrack, include=FALSE}
+## doing the actual filtering with max_after_backtrack
+max_after_backtrack <-
+  backtracks_df %>%
+  mutate(
+    "max_backtrack" = sapply(seq, max_backtrack)
+  ) %>%
+  pull(max_backtrack)
+```
+
+#### Resulting max_after_backtrack
+
+Converted to the tibble for the sake of the README. The original code should output a very long vector instead.
+
+```{r max_after_backtrack_result, echo=FALSE}
+print(tibble(max_after_backtrack))
+```
+
+### Part 4: even_odd_backtrack
+
+1.  **Objective:**
+
+-   Find the frequency count for even and odd bactracking integers. Save this vector as even_odd_backtrack.
+
+2.  **How:**
+
+-   Filtering the data
+
+    -   Using `backtracks_df`, use `count()` to find the frequency for each unique values in `parity`, which are `EVEN` and `ODD`
+
+    -   Use `pull()` to get the result column as a vector. Save it in `even_odd_backtrack`
+
+```{r even_odd_backtrack, include=FALSE}
+## only need to filter by parity
+even_odd_backtrack <-
+  backtracks_df %>%
+  count(parity) %>%
+  pull(n)
+```
+
+#### Resulting even_odd_backtrack
+
+First value being the even count, second being the odd count.
+
+```{r even_odd_backtrack_result, echo=FALSE}
+print(even_odd_backtrack)
+```
+
+## Task 4: Visualizations
+
+#### Sequence lengths x Starting integers scatter plot
+
+1.  **Objective**
+
+-   Create a scatter plot showing the correlation between sequence lengths (y-axis) and starting integers (x-axis).
+-   Additionally, we want to find the top 10 starting integers with the longest sequences and highlight them.
+
+2.  **How**
+
+-   Using the ggplot function to plot the top10integers and collatz_df data sets from tasks 1 and 2, respectively. Adjusting the color, size, and shape of the points brings focus on the top 10 points.
+-   Using the geom_text_repel() function to label the top 10 points.
+
+Here's how the plot for this scatter plot looks like:
+
+```{r Task_4_1, echo=FALSE}
+# Filtering the top 10 results from collatz_df
+top10data <- collatz_df %>%
+  filter(start %in% top10longest)
+
+# Create complex plots from data in a data frame using ggplot
+ggplot(
+  data = collatz_df,
+  mapping = aes(
+    x = start,
+    y = length
+  )
+) +
+  # Create scatter plot and labelling
+  geom_point() +
+  labs(
+    title = "Starting Integers vs Sequence Lengths",
+    x = "Starting Integers",
+    y = "Sequence Lengths"
+  ) +
+  geom_point(
+    data = top10data, aes(x = start, y = length),
+    col = "red", size = 3, shape = 15
+  ) +
+  # To avoid overlaps by repelling text labels
+  geom_text_repel(
+    data = top10data,
+    aes(x = start, y = length, label = start),
+    vjust = -0.5,
+    hjust = 0.5,
+    size = 3
+  ) +
+  theme_classic()
+```
+
+The whole code for this scatter plot can be found in [04-plots.R](04-plots.R) in Q1.
+
+#### Highest Sequence Value x Starting integers scatter plot
+
+1.  **Objective**
+
+-   Similar to question 1, but with a relationship between the starting integers (x-axis) and the highest sequence value (y-axis).
+
+2.  **How**
+
+-   By using the ggplot function.
+-   The scatter plot's top 10 beginning integers with the highest sequence value were given a distinct color that made them stand out. As a result, it is simpler to find and examine these individual data points.
+-   Logarithmic scale was used for the y-axis as some of the values ended up being much higher than the others, making the rest of the points squished at the bottom originally.
+
+Here's how the plot for this scatter plot looks like:
+
+```{r Task_4_2, echo=FALSE}
+# Identifying the top 10 starting integers (highest value reached)
+top10highvalue <- collatz_df %>%
+  # rearranging the data frame or starting integers in descending manners
+  arrange(desc(max_val)) %>%
+  # selecting top 10 starting integers from above code
+  top_n(10, max_val)
+
+# Create the scatterplot for highest value vs. starting integers
+ggplot(data = collatz_df, aes(x = start, y = max_val)) +
+  geom_point() + # Scatterplot for all integers
+  labs(
+    title = "Highest Sequence Value vs. Starting Integers",
+    x = "Starting Integers",
+    y = "Highest Sequence Value"
+  ) +
+  geom_point(
+    data = top10highvalue,
+    aes(x = start, y = max_val),
+    col = "purple4", # Color for the top 10 starting integers
+    size = 2, # Size of the points for the top 10
+    shape = 15 # Shape of the points for the top 10 (square)
+  ) +
+  geom_text_repel(
+    data = top10highvalue,
+    aes(x = start, y = max_val, label = start),
+    vjust = -0.5, # Adjust vertical position of labels
+    hjust = 0.5, # Adjust horizontal position of labels
+    size = 3, # Size of the labels
+    col = "orange2" # Color for labeling top 10 value points
+  ) +
+  scale_y_log10() + # Add logarithmic scale to the y-axis
+  theme_classic()
+```
+
+The whole code for this scatter plot can be found in [04-plots.R](04-plots.R) in Q2.
+
+#### Even x Odd starting integers box plot
+
+1.  **Objective**
+
+-   To visually examine and compare the distributional characteristics of sequence lengths for even and odd starting integers in order to gain insights into their behavior and properties.
+
+2.  **How**
+
+-   Similar to questions 1 and 2, make a box plot using ggplot for each category (even and odd).
+-   In these box plots, the y-axis represents the distribution of sequence lengths, and the x-axis the parity (even and odd).
+
+Here's how the plot for this scatter plot looks like:
+
+```{r Task_4_3, echo=FALSE}
+# Create a boxplot to compare the distributions
+ggplot(data = collatz_df, aes(x = parity, y = length, fill = parity)) +
+  geom_boxplot() +
+  labs(
+    title = "Sequence Lengths: Even vs Odd",
+    x = "Parity (Even/Odd)",
+    y = "Sequence Lengths"
+  ) +
+  theme_classic()
+```
+
+The whole code for this scatter plot can be found in [04-plots.R](04-plots.R) in Q3.
+
+These are the few differences that I can notice based on my observations.
+
+1.  **Overlap and Variability:**
+    -   The distribution of sequence lengths for even and odd starting integers shows a significant overlap, indicating that there is a wide range of sequence lengths for both groups.
+    -   Even starting integers exhibit a broader range of sequence lengths, suggesting greater variability compared to odd starting integers.
+2.  **Median length:**
+    -   The lower position of the median line (inside the box) for even integers compared to odd integers suggests that, on average, sequences starting with even integers tend to be shorter.
+3.  **Similar average length:**
+    -   Despite the lower median line for even integers, you've noted that the difference in average sequence length between even and odd starting integers is not substantial. In other words, both groups tend to have sequences of roughly similar average lengths.
+
+## Task 5: Open-ended Exploration
+
+### Question
+
+> What is the distribution of even and odd numbers in Collatz sequences?
+
+We will explore the Collatz Conjecture to understand the distributions of odd and even numbers within these sequences. Specifically, we want to estimate if there are patterns or trends related to the occurrence of odd and even numbers across different starting integers and visualize these distributions using R. Additionally, we also want to explore whether there is a relationship between even and odd numbers in terms of their ratio.
+
+### Methodology
+
+-   Generate `collatz_sequence` using an existing data frame `collatz_df` from previous tasks by initialization.
+-   Wrangle the data to identify `Even` and `Odd` numbers in each sequence and calculate the ratio of even to odd numbers (`even_odd_ratio`).
+-   Summarize statistics for even and odd numbers (`even_odd_avg_max`) and the `even_odd_ratio` (`ratio_avg_max`) separately.
+-   Calculate the average and maximum values for `Even` and `Odd` numbers.
+-   Calculate the average and maximum values for the `even_odd_ratio`.
+
+```{r Task_5, include=FALSE}
+
+#### Below is the Rcode used to answer our question
+
+# Initialize
+collatz_sequence <- collatz_df
+
+# Wrangle the data to identify odd and even numbers in each sequence and Calculate the ratio
+collatz_sequence <- collatz_sequence %>%
+  mutate(
+    even = sapply(seq, function(x) {
+      sum(x %% 2 == 0)
+    }),
+    odd = sapply(seq, function(x) {
+      sum(x %% 2 == 1)
+    }),
+    even_odd_ratio = even / odd
+  )
+
+# Summarize statistics for Even, Odd and even_odd_ratio
+even_odd_avg_max <- collatz_sequence %>%
+  gather(key = "type", value = "value", even, odd) %>%
+  group_by(type) %>%
+  summarize(
+    average = mean(value),
+    maximum = max(value)
+  )
+
+ratio_avg_max <- collatz_sequence %>%
+  gather(key = "type", value = "value", even_odd_ratio) %>%
+  group_by(type) %>%
+  summarize(
+    average = mean(value),
+    maximum = max(value)
+  )
+```
+
+### Findings
+
+By analyzing the Collatz sequences based from our Rcode above, we discovered the following results:-
+
+1.  **Counts of Even and Odd Numbers**
+    -   The analysis revealed that in Collatz Conjecture sequences, there is a distribution of both even and odd numbers.
+    -   The distribution shows that there are more even numbers compared to odd numbers (refer to [7.5.1 Counts of Odd & Even Numbers in Collatz Sequences](https://github.com/sm2302-aug23/grp-r-superfectagoras#751-counts-of-odd--even-numbers-in-collatz-sequences)).
+    -   The sum of both even and odd numbers individually from the respective sequences is computed.
+2.  **Even-Odd Ratio**
+    -   The calculated `even_odd_ratio` for each sequence varies individually but almost uniformly.
+    -   Such analysis can provide information about the average and maximum `even_odd_ratio` observed in the Collatz sequences.
+    -   If this result is visualized in a graph, one can see that it is mostly likely to showcase uniformity.
+3.  **Summary Statistics**
+    -   The summary statistics show the average and maximum counts for even and odd numbers (`even_odd_avg_max`), and even-odd ratios (`ratio_avg_max`) in the sequences.
+    -   This information helps in understanding the central tendency and variability of even and odd numbers, even if there is a slight variance.
+
+#### Below are the results obtained after the Rcode computational run
+
+##### Part 1: Collatz Sequence Table
+
+```{r collatz_sequence, echo=FALSE}
+print(collatz_sequence)
+```
+
+##### Part 2: Summary Statistics for Even and Odd Numbers Table
+
+```{r even_odd_avg_max, echo=FALSE}
+print(even_odd_avg_max)
+```
+
+##### Part 3: Summary Statistics for Ratio Table
+
+```{r ratio_avg_max, echo=FALSE}
+print(ratio_avg_max)
+```
+
+### Implications
+
+-   Understanding the distribution of even and odd numbers in Collatz Conjecture sequences can provide insights into the behavior of these sequences and their properties.
+-   The variations in even-odd ratios suggest that Collatz sequences exhibit diverse patterns. Further analysis might reveal patterns or characteristics associated with sequences that have high or low even-odd ratios.
+-   The summary statistics offer a concise overview of the data, aiding in comparisons and identifying sequences with unusual properties.
+
+### Conclusion
+
+The analysis of Collatz Conjecture sequences reveals that these sequences exhibit a distribution of both even and odd numbers (refer to [7.5.1 Counts of Odd & Even Numbers in Collatz Sequences](https://github.com/sm2302-aug23/grp-r-superfectagoras#751-counts-of-odd--even-numbers-in-collatz-sequences)). The even-to-odd ratio varies across different sequences, with a few sequences having higher ratios than others. This information can contribute to a deeper understanding of the Collatz Conjecture sequences and their patterns.
+
+## Task 6: Creative Visualisation Challenge
+
+### Question
+Plotting the ratio of even and odd numbers in the sequences.
+
+#### Method 1
+- By using `ggplot2` with `geom_histogram`.
+- First making `parity_table` with `c(collatz_sequence$even, collatz_sequence$odd)` which can be use to count the number of even and odd numbers in each sequence.
+- Using `parity_table[rep(seq_len(nrow(parity_table)), times = count), ]` to put into `parity_df` which can be used as `fill` for the histogram.
+- For x-axis of the histogram it would be the starting integers.
+
+```{r Task_6_1, echo=FALSE}
+parity_table <- 
+  tibble(
+    "ints" = rep(1:10000, times = 2),
+    "even_odds_count" = c(collatz_sequence$even, collatz_sequence$odd)
+  ) %>%
+  arrange(ints) %>%
+  mutate(
+    "parity" = rep(c("Even", "Odd"), times = 10000)
+  )
+
+count <- parity_table$even_odds_count
+parity_df <- parity_table[rep(seq_len(nrow(parity_table)), times = count), ]
+
+parity_df %>%
+  ggplot(
+    aes(
+      x = ints,
+      fill = parity
+    )
+  ) +
+  
+  geom_histogram(
+    binwidth = 1,
+    position = "fill") +
+  
+  theme_classic()
+```
+
+#### Method 2
+- By using `ggplot2` with `geom_point`.
+- Using `even_odd_ratio` as the y-axis.
+- The top ten highest ratio are labelled and colored in blue.
+- The red dots represents the ratio that are `odd>=even`.
+
+```{r Task_6_2, echo=FALSE}
+## Another way of plotting ratio
+
+odd_wins <-
+  collatz_sequence %>%
+  filter(even_odd_ratio <= 1)
+
+top10ratio <-
+  collatz_sequence %>%
+  arrange(desc(even_odd_ratio)) %>%
+  slice(1:10)
+
+collatz_sequence %>%
+  ggplot(
+    aes(
+      x = start,
+      y = even_odd_ratio
+    )
+  ) +
+  
+  geom_point(
+  ) +
+  
+  geom_point(
+    data = odd_wins,
+    color = "red"
+  ) +
+  
+  geom_point(
+    data = top10ratio,
+    color = "blue",
+    size = 1.5
+  ) +
+  
+  geom_text_repel(
+    data = top10ratio,
+    aes(label = start,
+        vjust = -0.5)
+  ) +
+  
+  theme_classic()
+
+```
+
+## Task 7 : Other Data
+
+### Task 5 append
+
+#### 7.5.1 Plot for Counts of Odd & Even Numbers in Collatz Sequences
+
+```{r collatz_sequence_plot_code, echo=FALSE}
+## Explore and visualize the distribution of even and odd numbers
+## For example, create a bar chart:
+collatz_sequence %>%
+  gather(key = "type", value = "count", odd, even) %>%
+  ggplot(aes(x = type, y = count, fill = type)) +
+  geom_bar(stat = "identity") +
+  labs(
+    title = "Counts of Odd & Even Numbers in Collatz Sequences",
+    x = "Number Type",
+    y = "Count"
+  ) +
+  theme_classic()
+```
+
+### Sequence Length Heatmap
+
+#### Question
+Comparing pairs of starting integers with absolute length difference using heatmap.
+
+##### Method
+- Make pairs of all possible starting integers using `expand(start1 = start[1:1000], start2 = start[1:1000])`
+- Calculate the absolute difference between the length of the pair using `abs(collatz_df$length[start1] - collatz_df$length[start2]))` 
+- There are straight diagonal lines seen in blue color that shows the pairs that have the same sequence length.
+
+```{r heatmap, echo=FALSE}
+### Making pairs of random starting integers
+pairs_df <- collatz_df %>%
+  expand(start1 = start[1:1000], start2 = start[1:1000])
+
+### Calculating the absolute difference between the length of the pairs
+pairs_df <- pairs_df %>%
+  mutate(abs_length_diff = abs(collatz_df$length[start1] - 
+                                 collatz_df$length[start2]))
+
+### Making the heatmap of the absolute length difference 
+heatmap_plot <- ggplot(pairs_df, aes(x = start1,
+                                     y = start2,
+                                     fill = abs_length_diff)) +
+  geom_tile() +
+  scale_fill_gradient(low = "blue",
+                      high = "red") +
+  labs(title = "Collatz Conjecture Heatmap - Absolute Length Difference",
+       x = "1st Starting Integer",
+       y = "2nd Starting Integer") +
+  theme_minimal()
+
+print(heatmap_plot)
+```
+
+## Contributors
+
+-   **Task 1:** Waqi :computer: :sparkles:
+
+-   **Task 2:** Ros :octocat: :wilted_flower:
+
+-   **Task 3:** Waqi :computer: :sparkles:
+
+-   **Task 4:** Wana :books: :pill:
+
+-   **Task 5:** Fizah :partly_sunny: :milky_way:
+
+-   **Task 6:** Ros :octocat: :wilted_flower:
+
+-   **Task 7:** Fizah & Ros :partly_sunny: :milky_way: :octocat: :wilted_flower:
+
+-   **README:** All :computer: :sparkles: :octocat: :wilted_flower: :books: :pill: :partly_sunny: :milky_way:

@@ -48,7 +48,6 @@ po/*~
 # RStudio Connect folder
 rsconnect/
 .DS_Store
-README.Rmd
 ASSIGNMENT.Rmd
 checklist.xlsx
 solution_.R
